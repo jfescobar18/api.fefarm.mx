@@ -1,17 +1,63 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+﻿@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,600);
+
+* {
+    margin: 0;
+    padding: 0;
 }
 
-/* Set padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+body {
+    font-family: 'Open Sans', sans-serif;
+    background: #17212c;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+.container {
+    width: 90%;
+    margin: 0 auto;
+}
+
+a {
+    text-decoration: none;
+}
+
+.banner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.banner h1 {
+    border-top: 4px solid #fff;
+    border-bottom: 4px solid #fff;
+    display: inline-block;
+    padding: 10px;
+}
+
+a {
+    margin-top: 20px;
+    text-transform: uppercase;
+    padding: 5px 20px;
+    font-size: 20px;
+}
+
+a.btn-success {
+    background: #ff9f1c;
+    border: 1px solid #ff9f1c;
+}
+
+.btn-primary {
+    background: #f25f5c;
+    border: 1px solid #f25f5c;
+}
+
+.icon {
+    margin-top: 20px;
+}
+
+.icon a {
+    padding: 5px 10px;
+    font-size: 25px;
+    color: #fdfffc;
 }

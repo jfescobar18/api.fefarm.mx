@@ -175,8 +175,8 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Entity\CMS_fefarm.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CMS_fefarm.Context.cs</LastGenOutput>
       <DependentUpon>CMS_fefarm.edmx</DependentUpon>
+      <LastGenOutput>CMS_fefarm.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Entity\CMS_fefarm.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -185,15 +185,7 @@
     </Content>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <EntityDeploy Include="Entity\CMS_fefarm.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>CMS_fefarm.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Entity\CMS_fefarm.edmx.diagram">
-      <DependentUpon>CMS_fefarm.edmx</DependentUpon>
-    </Content>
-    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
-    <Content Include="Web.config" />
+    <None Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -214,7 +206,15 @@
     <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
+    <EntityDeploy Include="Entity\CMS_fefarm.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>CMS_fefarm.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Entity\CMS_fefarm.edmx.diagram">
+      <DependentUpon>CMS_fefarm.edmx</DependentUpon>
+    </Content>
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\ProductionProfile.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

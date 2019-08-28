@@ -25,7 +25,7 @@ namespace api.fefarm.mx.Entity
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<cat_Grant_PDF> cat_Grant_PDF { get; set; }
         public virtual DbSet<cat_Admin_Users> cat_Admin_Users { get; set; }
+        public virtual DbSet<cat_Grant_PDF> cat_Grant_PDF { get; set; }
     }
 }

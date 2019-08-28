@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="CMS_fefarmModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="CMS_fefarmModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="cat_Admin_Users">
           <Key>
             <PropertyRef Name="Admin_User_Id" />
@@ -23,13 +23,22 @@
           <Property Name="Grant_PDF_Upload_Date" Type="datetime" />
         </EntityType>
         <EntityContainer Name="CMS_fefarmModelStoreContainer">
-          <EntitySet Name="cat_Admin_Users" EntityType="Self.cat_Admin_Users" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="cat_Grant_PDF" EntityType="Self.cat_Grant_PDF" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="cat_Admin_Users" EntityType="Self.cat_Admin_Users" Schema="fefarmmx_admin" store:Type="Tables" />
+          <EntitySet Name="cat_Grant_PDF" EntityType="Self.cat_Grant_PDF" Schema="fefarmmx_admin" store:Type="Tables" />
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CMS_fefarmModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="cat_Admin_Users">
+          <Key>
+            <PropertyRef Name="Admin_User_Id" />
+          </Key>
+          <Property Name="Admin_User_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Admin_User_Username" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Admin_User_Password" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+        </EntityType>
         <EntityType Name="cat_Grant_PDF">
           <Key>
             <PropertyRef Name="Grant_PDF_Id" />
@@ -40,23 +49,24 @@
           <Property Name="Grant_PDF_Upload_Date" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityContainer Name="CMS_fefarmEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="cat_Admin_Users" EntityType="Self.cat_Admin_Users" />
           <EntitySet Name="cat_Grant_PDF" EntityType="Self.cat_Grant_PDF" />
-          <EntitySet Name="cat_Admin_Users" EntityType="CMS_fefarmModel.cat_Admin_Users" />
         </EntityContainer>
-        <EntityType Name="cat_Admin_Users">
-          <Key>
-            <PropertyRef Name="Admin_User_Id" />
-          </Key>
-          <Property Name="Admin_User_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Admin_User_Username" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
-          <Property Name="Admin_User_Password" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="CMS_fefarmModelStoreContainer" CdmEntityContainer="CMS_fefarmEntities">
+          <EntitySetMapping Name="cat_Admin_Users">
+            <EntityTypeMapping TypeName="CMS_fefarmModel.cat_Admin_Users">
+              <MappingFragment StoreEntitySet="cat_Admin_Users">
+                <ScalarProperty Name="Admin_User_Id" ColumnName="Admin_User_Id" />
+                <ScalarProperty Name="Admin_User_Username" ColumnName="Admin_User_Username" />
+                <ScalarProperty Name="Admin_User_Password" ColumnName="Admin_User_Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="cat_Grant_PDF">
             <EntityTypeMapping TypeName="CMS_fefarmModel.cat_Grant_PDF">
               <MappingFragment StoreEntitySet="cat_Grant_PDF">
@@ -64,15 +74,6 @@
                 <ScalarProperty Name="Grant_PDF_Name" ColumnName="Grant_PDF_Name" />
                 <ScalarProperty Name="Grant_PDF_Path" ColumnName="Grant_PDF_Path" />
                 <ScalarProperty Name="Grant_PDF_Upload_Date" ColumnName="Grant_PDF_Upload_Date" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="cat_Admin_Users">
-            <EntityTypeMapping TypeName="CMS_fefarmModel.cat_Admin_Users">
-              <MappingFragment StoreEntitySet="cat_Admin_Users">
-                <ScalarProperty Name="Admin_User_Password" ColumnName="Admin_User_Password" />
-                <ScalarProperty Name="Admin_User_Username" ColumnName="Admin_User_Username" />
-                <ScalarProperty Name="Admin_User_Id" ColumnName="Admin_User_Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

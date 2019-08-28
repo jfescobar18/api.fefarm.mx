@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CMS_fefarmModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="cat_Admin_Users">
+          <Key>
+            <PropertyRef Name="Admin_User_Id" />
+          </Key>
+          <Property Name="Admin_User_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Admin_User_Username" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="Admin_User_Password" Type="varbinary(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="cat_Grant_PDF">
+          <Key>
+            <PropertyRef Name="Grant_PDF_Id" />
+          </Key>
+          <Property Name="Grant_PDF_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Grant_PDF_Name" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="Grant_PDF_Path" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="Grant_PDF_Upload_Date" Type="datetime" />
+        </EntityType>
+        <EntityContainer Name="CMS_fefarmModelStoreContainer">
+          <EntitySet Name="cat_Admin_Users" EntityType="Self.cat_Admin_Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="cat_Grant_PDF" EntityType="Self.cat_Grant_PDF" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CMS_fefarmModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="cat_Grant_PDF">
+          <Key>
+            <PropertyRef Name="Grant_PDF_Id" />
+          </Key>
+          <Property Name="Grant_PDF_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Grant_PDF_Name" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Grant_PDF_Path" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Grant_PDF_Upload_Date" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityContainer Name="CMS_fefarmEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="cat_Grant_PDF" EntityType="Self.cat_Grant_PDF" />
+          <EntitySet Name="cat_Admin_Users" EntityType="CMS_fefarmModel.cat_Admin_Users" />
+        </EntityContainer>
+        <EntityType Name="cat_Admin_Users">
+          <Key>
+            <PropertyRef Name="Admin_User_Id" />
+          </Key>
+          <Property Name="Admin_User_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Admin_User_Username" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="Admin_User_Password" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CMS_fefarmModelStoreContainer" CdmEntityContainer="CMS_fefarmEntities">
+          <EntitySetMapping Name="cat_Grant_PDF">
+            <EntityTypeMapping TypeName="CMS_fefarmModel.cat_Grant_PDF">
+              <MappingFragment StoreEntitySet="cat_Grant_PDF">
+                <ScalarProperty Name="Grant_PDF_Id" ColumnName="Grant_PDF_Id" />
+                <ScalarProperty Name="Grant_PDF_Name" ColumnName="Grant_PDF_Name" />
+                <ScalarProperty Name="Grant_PDF_Path" ColumnName="Grant_PDF_Path" />
+                <ScalarProperty Name="Grant_PDF_Upload_Date" ColumnName="Grant_PDF_Upload_Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cat_Admin_Users">
+            <EntityTypeMapping TypeName="CMS_fefarmModel.cat_Admin_Users">
+              <MappingFragment StoreEntitySet="cat_Admin_Users">
+                <ScalarProperty Name="Admin_User_Password" ColumnName="Admin_User_Password" />
+                <ScalarProperty Name="Admin_User_Username" ColumnName="Admin_User_Username" />
+                <ScalarProperty Name="Admin_User_Id" ColumnName="Admin_User_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

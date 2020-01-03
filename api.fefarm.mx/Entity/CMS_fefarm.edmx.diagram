@@ -7,6 +7,9 @@
       <Diagram DiagramId="5eaf323900b94d048de1559104ce3b68" Name="Diagram1">
         <EntityTypeShape EntityType="CMS_fefarmModel.cat_Admin_Users" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="CMS_fefarmModel.cat_Grant_PDF" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Evidences_PDF" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Requirements_PDF" Width="1.5" PointX="2.75" PointY="3.75" />
+        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Rules_PDF" Width="1.5" PointX="4.75" PointY="3.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

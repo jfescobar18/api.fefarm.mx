@@ -8,11 +8,12 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
+using System.Web.Http.Cors;
 using System.Web.Http;
 
 namespace api.fefarm.mx.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class UsersController : ApiController
     {
         [HttpPost]

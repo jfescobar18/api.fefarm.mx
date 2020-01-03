@@ -18,6 +18,7 @@ namespace api.fefarm.mx.Entity
         public CMS_fefarmEntities()
             : base("name=CMS_fefarmEntities")
         {
+    		this.Configuration.ProxyCreationEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -27,5 +28,8 @@ namespace api.fefarm.mx.Entity
     
         public virtual DbSet<cat_Admin_Users> cat_Admin_Users { get; set; }
         public virtual DbSet<cat_Grant_PDF> cat_Grant_PDF { get; set; }
+        public virtual DbSet<cat_Evidences_PDF> cat_Evidences_PDF { get; set; }
+        public virtual DbSet<cat_Requirements_PDF> cat_Requirements_PDF { get; set; }
+        public virtual DbSet<cat_Rules_PDF> cat_Rules_PDF { get; set; }
     }
 }

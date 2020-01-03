@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CMS_fefarmModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="CMS_fefarmModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="cat_Admin_Users">
           <Key>
             <PropertyRef Name="Admin_User_Id" />
@@ -12,6 +12,15 @@
           <Property Name="Admin_User_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Admin_User_Username" Type="nvarchar" MaxLength="512" Nullable="false" />
           <Property Name="Admin_User_Password" Type="varbinary(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="cat_Evidences_PDF">
+          <Key>
+            <PropertyRef Name="Evidences_PDF_Id" />
+          </Key>
+          <Property Name="Evidences_PDF_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Evidences_PDF_Name" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="Evidences_PDF_Path" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="Evidences_PDF_Upload_Date" Type="datetime" />
         </EntityType>
         <EntityType Name="cat_Grant_PDF">
           <Key>
@@ -22,12 +31,32 @@
           <Property Name="Grant_PDF_Path" Type="nvarchar" MaxLength="512" Nullable="false" />
           <Property Name="Grant_PDF_Upload_Date" Type="datetime" />
         </EntityType>
+        <EntityType Name="cat_Requirements_PDF">
+          <Key>
+            <PropertyRef Name="Requirements_PDF_Id" />
+          </Key>
+          <Property Name="Requirements_PDF_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Requirements_PDF_Name" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="Requirements_PDF_Path" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="Requirements_PDF_Upload_Date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="cat_Rules_PDF">
+          <Key>
+            <PropertyRef Name="Rules_PDF_Id" />
+          </Key>
+          <Property Name="Rules_PDF_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Rules_PDF_Name" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="Rules_PDF_Path" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="Rules_PDF_Upload_Date" Type="datetime" />
+        </EntityType>
         <EntityContainer Name="CMS_fefarmModelStoreContainer">
           <EntitySet Name="cat_Admin_Users" EntityType="Self.cat_Admin_Users" Schema="fefarmmx_admin" store:Type="Tables" />
+          <EntitySet Name="cat_Evidences_PDF" EntityType="Self.cat_Evidences_PDF" Schema="fefarmmx_admin" store:Type="Tables" />
           <EntitySet Name="cat_Grant_PDF" EntityType="Self.cat_Grant_PDF" Schema="fefarmmx_admin" store:Type="Tables" />
+          <EntitySet Name="cat_Requirements_PDF" EntityType="Self.cat_Requirements_PDF" Schema="fefarmmx_admin" store:Type="Tables" />
+          <EntitySet Name="cat_Rules_PDF" EntityType="Self.cat_Rules_PDF" Schema="fefarmmx_admin" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CMS_fefarmModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -51,7 +80,37 @@
         <EntityContainer Name="CMS_fefarmEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="cat_Admin_Users" EntityType="Self.cat_Admin_Users" />
           <EntitySet Name="cat_Grant_PDF" EntityType="Self.cat_Grant_PDF" />
+          <EntitySet Name="cat_Evidences_PDF" EntityType="CMS_fefarmModel.cat_Evidences_PDF" />
+          <EntitySet Name="cat_Requirements_PDF" EntityType="CMS_fefarmModel.cat_Requirements_PDF" />
+          <EntitySet Name="cat_Rules_PDF" EntityType="CMS_fefarmModel.cat_Rules_PDF" />
         </EntityContainer>
+        <EntityType Name="cat_Evidences_PDF">
+          <Key>
+            <PropertyRef Name="Evidences_PDF_Id" />
+          </Key>
+          <Property Name="Evidences_PDF_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Evidences_PDF_Name" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="Evidences_PDF_Path" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="Evidences_PDF_Upload_Date" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="cat_Requirements_PDF">
+          <Key>
+            <PropertyRef Name="Requirements_PDF_Id" />
+          </Key>
+          <Property Name="Requirements_PDF_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Requirements_PDF_Name" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="Requirements_PDF_Path" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="Requirements_PDF_Upload_Date" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="cat_Rules_PDF">
+          <Key>
+            <PropertyRef Name="Rules_PDF_Id" />
+          </Key>
+          <Property Name="Rules_PDF_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Rules_PDF_Name" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="Rules_PDF_Path" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="Rules_PDF_Upload_Date" Type="DateTime" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -74,6 +133,36 @@
                 <ScalarProperty Name="Grant_PDF_Name" ColumnName="Grant_PDF_Name" />
                 <ScalarProperty Name="Grant_PDF_Path" ColumnName="Grant_PDF_Path" />
                 <ScalarProperty Name="Grant_PDF_Upload_Date" ColumnName="Grant_PDF_Upload_Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cat_Evidences_PDF">
+            <EntityTypeMapping TypeName="CMS_fefarmModel.cat_Evidences_PDF">
+              <MappingFragment StoreEntitySet="cat_Evidences_PDF">
+                <ScalarProperty Name="Evidences_PDF_Upload_Date" ColumnName="Evidences_PDF_Upload_Date" />
+                <ScalarProperty Name="Evidences_PDF_Path" ColumnName="Evidences_PDF_Path" />
+                <ScalarProperty Name="Evidences_PDF_Name" ColumnName="Evidences_PDF_Name" />
+                <ScalarProperty Name="Evidences_PDF_Id" ColumnName="Evidences_PDF_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cat_Requirements_PDF">
+            <EntityTypeMapping TypeName="CMS_fefarmModel.cat_Requirements_PDF">
+              <MappingFragment StoreEntitySet="cat_Requirements_PDF">
+                <ScalarProperty Name="Requirements_PDF_Upload_Date" ColumnName="Requirements_PDF_Upload_Date" />
+                <ScalarProperty Name="Requirements_PDF_Path" ColumnName="Requirements_PDF_Path" />
+                <ScalarProperty Name="Requirements_PDF_Name" ColumnName="Requirements_PDF_Name" />
+                <ScalarProperty Name="Requirements_PDF_Id" ColumnName="Requirements_PDF_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cat_Rules_PDF">
+            <EntityTypeMapping TypeName="CMS_fefarmModel.cat_Rules_PDF">
+              <MappingFragment StoreEntitySet="cat_Rules_PDF">
+                <ScalarProperty Name="Rules_PDF_Upload_Date" ColumnName="Rules_PDF_Upload_Date" />
+                <ScalarProperty Name="Rules_PDF_Path" ColumnName="Rules_PDF_Path" />
+                <ScalarProperty Name="Rules_PDF_Name" ColumnName="Rules_PDF_Name" />
+                <ScalarProperty Name="Rules_PDF_Id" ColumnName="Rules_PDF_Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -35,7 +35,7 @@ namespace api.fefarm.mx.Controllers
                 var pdf = new cat_Requirements_PDF()
                 {
                     Requirements_PDF_Name = json.Requirements_PDF_Name,
-                    Requirements_PDF_Path = "RequirementsPDF/" + filenames[0],
+                    Requirements_PDF_Path = "PDFs/RequirementsPDF/" + filenames[0],
                     Requirements_PDF_Upload_Date = DateTime.Now
                 };
 
@@ -74,7 +74,7 @@ namespace api.fefarm.mx.Controllers
                 if (HttpContext.Current.Request.Files.Count > 0)
                 {
                     FileUtils.ReplaceFile(pdf.Requirements_PDF_Path, HttpContext.Current.Request, "RequirementsPDF", ref statusCode, ref dict, ref filenames);
-                    pdf.Requirements_PDF_Path = "RequirementsPDF/" + filenames[0];
+                    pdf.Requirements_PDF_Path = "PDFs/RequirementsPDF/" + filenames[0];
                 }
 
                 pdf.Requirements_PDF_Name = json.Requirements_PDF_Name;

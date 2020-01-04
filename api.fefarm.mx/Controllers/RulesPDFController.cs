@@ -35,7 +35,7 @@ namespace api.fefarm.mx.Controllers
                 var pdf = new cat_Rules_PDF()
                 {
                     Rules_PDF_Name = json.Rules_PDF_Name,
-                    Rules_PDF_Path = "RulesPDF/" + filenames[0],
+                    Rules_PDF_Path = "PDFs/RulesPDF/" + filenames[0],
                     Rules_PDF_Upload_Date = DateTime.Now
                 };
 
@@ -74,7 +74,7 @@ namespace api.fefarm.mx.Controllers
                 if (HttpContext.Current.Request.Files.Count > 0)
                 {
                     FileUtils.ReplaceFile(pdf.Rules_PDF_Path, HttpContext.Current.Request, "RulesPDF", ref statusCode, ref dict, ref filenames);
-                    pdf.Rules_PDF_Path = "RulesPDF/" + filenames[0];
+                    pdf.Rules_PDF_Path = "PDFs/RulesPDF/" + filenames[0];
                 }
 
                 pdf.Rules_PDF_Name = json.Rules_PDF_Name;

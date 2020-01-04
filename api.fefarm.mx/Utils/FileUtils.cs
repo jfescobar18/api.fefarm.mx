@@ -12,9 +12,9 @@ namespace Utils
         {
             try
             {
-                if (!Directory.Exists(HttpContext.Current.Server.MapPath($"~/{folder}")))
+                if (!Directory.Exists(HttpContext.Current.Server.MapPath($"~/PDFs/{folder}")))
                 {
-                    Directory.CreateDirectory(HttpContext.Current.Server.MapPath($"~/{folder}"));
+                    Directory.CreateDirectory(HttpContext.Current.Server.MapPath($"~/PDFs/{folder}"));
                 }
 
                 if (httpRequest.Files.Count > 0)
@@ -40,7 +40,7 @@ namespace Utils
                             }
                             else
                             {
-                                postedFile.SaveAs(HttpContext.Current.Server.MapPath($"~/{folder}/" + postedFile.FileName));
+                                postedFile.SaveAs(HttpContext.Current.Server.MapPath($"~/PDFs/{folder}/" + postedFile.FileName));
                                 filenames.Add(postedFile.FileName);
                                 dict.Add("message", "PDF updated Successfully");
                                 statusCode = HttpStatusCode.OK;

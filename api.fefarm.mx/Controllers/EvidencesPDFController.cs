@@ -35,7 +35,7 @@ namespace api.fefarm.mx.Controllers
                 var pdf = new cat_Evidences_PDF()
                 {
                     Evidences_PDF_Name = json.Evidences_PDF_Name,
-                    Evidences_PDF_Path = "EvidencesPDF/" + filenames[0],
+                    Evidences_PDF_Path = "PDFs/EvidencesPDF/" + filenames[0],
                     Evidences_PDF_Upload_Date = DateTime.Now
                 };
 
@@ -74,7 +74,7 @@ namespace api.fefarm.mx.Controllers
                 if (HttpContext.Current.Request.Files.Count > 0)
                 {
                     FileUtils.ReplaceFile(pdf.Evidences_PDF_Path, HttpContext.Current.Request, "EvidencesPDF", ref statusCode, ref dict, ref filenames);
-                    pdf.Evidences_PDF_Path = "EvidencesPDF/" + filenames[0];
+                    pdf.Evidences_PDF_Path = "PDFs/EvidencesPDF/" + filenames[0];
                 }
 
                 pdf.Evidences_PDF_Name = json.Evidences_PDF_Name;

@@ -222,7 +222,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\" />
-    <Folder Include="PDFs\" />
     <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>

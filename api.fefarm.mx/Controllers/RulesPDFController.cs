@@ -71,11 +71,20 @@ namespace api.fefarm.mx.Controllers
 
                 var pdf = entity.cat_Rules_PDF.SingleOrDefault(x => x.Rules_PDF_Id == json.Rules_PDF_Id);
 
-                FileUtils.ReplaceFile(pdf.Rules_PDF_Path, HttpContext.Current.Request, "RulesPDF", ref statusCode, ref dict, ref filenames);
+                if (HttpContext.Current.Request.Files.Count > 0)
+                {
+                    FileUtils.ReplaceFile(pdf.Rules_PDF_Path, HttpContext.Current.Request, "RulesPDF", ref statusCode, ref dict, ref filenames);
+                    pdf.Rules_PDF_Path = "RulesPDF/" + filenames[0];
+                }
 
                 pdf.Rules_PDF_Name = json.Rules_PDF_Name;
-                pdf.Rules_PDF_Path = "RulesPDF/" + filenames[0];
                 entity.SaveChanges();
+
+                statusCode = HttpStatusCode.OK;
+                if (dict.Keys.Count == 0)
+                {
+                    dict.Add("message", "PDF updated successfully");
+                }
             }
             catch (Exception ex)
             {

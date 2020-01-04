@@ -71,11 +71,20 @@ namespace api.fefarm.mx.Controllers
 
                 var pdf = entity.cat_Evidences_PDF.SingleOrDefault(x => x.Evidences_PDF_Id == json.Evidences_PDF_Id);
 
-                FileUtils.ReplaceFile(pdf.Evidences_PDF_Path, HttpContext.Current.Request, "EvidencesPDF", ref statusCode, ref dict, ref filenames);
+                if (HttpContext.Current.Request.Files.Count > 0)
+                {
+                    FileUtils.ReplaceFile(pdf.Evidences_PDF_Path, HttpContext.Current.Request, "EvidencesPDF", ref statusCode, ref dict, ref filenames);
+                    pdf.Evidences_PDF_Path = "EvidencesPDF/" + filenames[0];
+                }
 
                 pdf.Evidences_PDF_Name = json.Evidences_PDF_Name;
-                pdf.Evidences_PDF_Path = "EvidencesPDF/" + filenames[0];
                 entity.SaveChanges();
+
+                statusCode = HttpStatusCode.OK;
+                if (dict.Keys.Count == 0)
+                {
+                    dict.Add("message", "PDF updated successfully");
+                }
             }
             catch (Exception ex)
             {

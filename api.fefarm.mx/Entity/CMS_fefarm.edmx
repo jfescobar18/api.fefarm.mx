@@ -31,6 +31,19 @@
           <Property Name="Grant_PDF_Path" Type="nvarchar" MaxLength="512" Nullable="false" />
           <Property Name="Grant_PDF_Upload_Date" Type="datetime" />
         </EntityType>
+        <EntityType Name="cat_Requests">
+          <Key>
+            <PropertyRef Name="Request_Id" />
+          </Key>
+          <Property Name="Request_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Request_Name" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="Request_JSON_Body" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Request_Creation_Date" Type="datetime" Nullable="false" />
+          <Property Name="Request_Start_Date" Type="datetime" Nullable="false" />
+          <Property Name="Request_Finish_Date" Type="datetime" Nullable="false" />
+          <Property Name="Request_Max_Applications" Type="int" />
+          <Property Name="Request_Max_Beneficiaries" Type="int" />
+        </EntityType>
         <EntityType Name="cat_Requirements_PDF">
           <Key>
             <PropertyRef Name="Requirements_PDF_Id" />
@@ -49,12 +62,42 @@
           <Property Name="Rules_PDF_Path" Type="nvarchar" MaxLength="512" Nullable="false" />
           <Property Name="Rules_PDF_Upload_Date" Type="datetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Requests' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vw_Requests">
+          <Key>
+            <PropertyRef Name="Request_Id" />
+            <PropertyRef Name="Request_Name" />
+            <PropertyRef Name="Request_JSON_Body" />
+          </Key>
+          <Property Name="Request_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Request_Name" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="Request_JSON_Body" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Request_Creation_Date" Type="varchar" MaxLength="30" />
+          <Property Name="Request_Start_Date" Type="varchar" MaxLength="30" />
+          <Property Name="Request_Finish_Date" Type="varchar" MaxLength="30" />
+          <Property Name="Request_Max_Applications" Type="int" />
+          <Property Name="Request_Max_Beneficiaries" Type="int" />
+        </EntityType>
         <EntityContainer Name="CMS_fefarmModelStoreContainer">
           <EntitySet Name="cat_Admin_Users" EntityType="Self.cat_Admin_Users" Schema="fefarmmx_admin" store:Type="Tables" />
           <EntitySet Name="cat_Evidences_PDF" EntityType="Self.cat_Evidences_PDF" Schema="fefarmmx_admin" store:Type="Tables" />
           <EntitySet Name="cat_Grant_PDF" EntityType="Self.cat_Grant_PDF" Schema="fefarmmx_admin" store:Type="Tables" />
+          <EntitySet Name="cat_Requests" EntityType="Self.cat_Requests" Schema="fefarmmx_admin" store:Type="Tables" />
           <EntitySet Name="cat_Requirements_PDF" EntityType="Self.cat_Requirements_PDF" Schema="fefarmmx_admin" store:Type="Tables" />
           <EntitySet Name="cat_Rules_PDF" EntityType="Self.cat_Rules_PDF" Schema="fefarmmx_admin" store:Type="Tables" />
+          <EntitySet Name="vw_Requests" EntityType="Self.vw_Requests" store:Type="Views" store:Schema="fefarmmx_admin">
+            <DefiningQuery>SELECT 
+    [vw_Requests].[Request_Id] AS [Request_Id], 
+    [vw_Requests].[Request_Name] AS [Request_Name], 
+    [vw_Requests].[Request_JSON_Body] AS [Request_JSON_Body], 
+    [vw_Requests].[Request_Creation_Date] AS [Request_Creation_Date], 
+    [vw_Requests].[Request_Start_Date] AS [Request_Start_Date], 
+    [vw_Requests].[Request_Finish_Date] AS [Request_Finish_Date], 
+    [vw_Requests].[Request_Max_Applications] AS [Request_Max_Applications], 
+    [vw_Requests].[Request_Max_Beneficiaries] AS [Request_Max_Beneficiaries]
+    FROM [fefarmmx_admin].[vw_Requests] AS [vw_Requests]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -83,6 +126,8 @@
           <EntitySet Name="cat_Evidences_PDF" EntityType="CMS_fefarmModel.cat_Evidences_PDF" />
           <EntitySet Name="cat_Requirements_PDF" EntityType="CMS_fefarmModel.cat_Requirements_PDF" />
           <EntitySet Name="cat_Rules_PDF" EntityType="CMS_fefarmModel.cat_Rules_PDF" />
+          <EntitySet Name="cat_Requests" EntityType="CMS_fefarmModel.cat_Requests" />
+          <EntitySet Name="vw_Requests" EntityType="CMS_fefarmModel.vw_Requests" />
         </EntityContainer>
         <EntityType Name="cat_Evidences_PDF">
           <Key>
@@ -110,6 +155,34 @@
           <Property Name="Rules_PDF_Name" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
           <Property Name="Rules_PDF_Path" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
           <Property Name="Rules_PDF_Upload_Date" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="cat_Requests">
+          <Key>
+            <PropertyRef Name="Request_Id" />
+          </Key>
+          <Property Name="Request_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Request_Name" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="Request_JSON_Body" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Request_Creation_Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Request_Start_Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Request_Finish_Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Request_Max_Applications" Type="Int32" />
+          <Property Name="Request_Max_Beneficiaries" Type="Int32" />
+        </EntityType>
+        <EntityType Name="vw_Requests">
+          <Key>
+            <PropertyRef Name="Request_Id" />
+            <PropertyRef Name="Request_Name" />
+            <PropertyRef Name="Request_JSON_Body" />
+          </Key>
+          <Property Name="Request_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Request_Name" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="Request_JSON_Body" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Request_Creation_Date" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Request_Start_Date" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Request_Finish_Date" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Request_Max_Applications" Type="Int32" />
+          <Property Name="Request_Max_Beneficiaries" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -163,6 +236,34 @@
                 <ScalarProperty Name="Rules_PDF_Path" ColumnName="Rules_PDF_Path" />
                 <ScalarProperty Name="Rules_PDF_Name" ColumnName="Rules_PDF_Name" />
                 <ScalarProperty Name="Rules_PDF_Id" ColumnName="Rules_PDF_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cat_Requests">
+            <EntityTypeMapping TypeName="CMS_fefarmModel.cat_Requests">
+              <MappingFragment StoreEntitySet="cat_Requests">
+                <ScalarProperty Name="Request_Max_Beneficiaries" ColumnName="Request_Max_Beneficiaries" />
+                <ScalarProperty Name="Request_Max_Applications" ColumnName="Request_Max_Applications" />
+                <ScalarProperty Name="Request_Finish_Date" ColumnName="Request_Finish_Date" />
+                <ScalarProperty Name="Request_Start_Date" ColumnName="Request_Start_Date" />
+                <ScalarProperty Name="Request_Creation_Date" ColumnName="Request_Creation_Date" />
+                <ScalarProperty Name="Request_JSON_Body" ColumnName="Request_JSON_Body" />
+                <ScalarProperty Name="Request_Name" ColumnName="Request_Name" />
+                <ScalarProperty Name="Request_Id" ColumnName="Request_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vw_Requests">
+            <EntityTypeMapping TypeName="CMS_fefarmModel.vw_Requests">
+              <MappingFragment StoreEntitySet="vw_Requests">
+                <ScalarProperty Name="Request_Max_Beneficiaries" ColumnName="Request_Max_Beneficiaries" />
+                <ScalarProperty Name="Request_Max_Applications" ColumnName="Request_Max_Applications" />
+                <ScalarProperty Name="Request_Finish_Date" ColumnName="Request_Finish_Date" />
+                <ScalarProperty Name="Request_Start_Date" ColumnName="Request_Start_Date" />
+                <ScalarProperty Name="Request_Creation_Date" ColumnName="Request_Creation_Date" />
+                <ScalarProperty Name="Request_JSON_Body" ColumnName="Request_JSON_Body" />
+                <ScalarProperty Name="Request_Name" ColumnName="Request_Name" />
+                <ScalarProperty Name="Request_Id" ColumnName="Request_Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

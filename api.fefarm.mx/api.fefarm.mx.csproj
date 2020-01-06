@@ -147,6 +147,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\EvidencesPDFController.cs" />
+    <Compile Include="Controllers\RequestsController.cs" />
     <Compile Include="Controllers\RequirementsPDFController.cs" />
     <Compile Include="Controllers\RulesPDFController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -158,6 +159,9 @@
       <DependentUpon>CMS_fefarm.tt</DependentUpon>
     </Compile>
     <Compile Include="Entity\cat_Grant_PDF.cs">
+      <DependentUpon>CMS_fefarm.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\cat_Requests.cs">
       <DependentUpon>CMS_fefarm.tt</DependentUpon>
     </Compile>
     <Compile Include="Entity\cat_Requirements_PDF.cs">
@@ -180,6 +184,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CMS_fefarm.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\vw_Requests.cs">
+      <DependentUpon>CMS_fefarm.tt</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

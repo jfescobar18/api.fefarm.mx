@@ -10,6 +10,8 @@
         <EntityTypeShape EntityType="CMS_fefarmModel.cat_Evidences_PDF" Width="1.5" PointX="0.75" PointY="3.75" />
         <EntityTypeShape EntityType="CMS_fefarmModel.cat_Requirements_PDF" Width="1.5" PointX="2.75" PointY="3.75" />
         <EntityTypeShape EntityType="CMS_fefarmModel.cat_Rules_PDF" Width="1.5" PointX="4.75" PointY="3.75" />
+        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Requests" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="CMS_fefarmModel.vw_Requests" Width="1.5" PointX="3.375" PointY="6.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

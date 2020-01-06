@@ -31,5 +31,7 @@ namespace api.fefarm.mx.Entity
         public virtual DbSet<cat_Evidences_PDF> cat_Evidences_PDF { get; set; }
         public virtual DbSet<cat_Requirements_PDF> cat_Requirements_PDF { get; set; }
         public virtual DbSet<cat_Rules_PDF> cat_Rules_PDF { get; set; }
+        public virtual DbSet<cat_Requests> cat_Requests { get; set; }
+        public virtual DbSet<vw_Requests> vw_Requests { get; set; }
     }
 }

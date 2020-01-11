@@ -30,7 +30,7 @@ namespace api.fefarm.mx.Controllers
                 string jsonString = HttpContext.Current.Request.Form["cat_Requirements_PDF"];
                 cat_Requirements_PDF json = JsonConvert.DeserializeObject<cat_Requirements_PDF>(jsonString);
 
-                FileUtils.UploadPDF(HttpContext.Current.Request, "RequirementsPDF", ref statusCode, ref dict, ref filenames);
+                FileUtils.UploadFiles(HttpContext.Current.Request, "~/PDFs/RequirementsPDF", ref statusCode, ref dict, ref filenames);
 
                 var pdf = new cat_Requirements_PDF()
                 {
@@ -73,7 +73,7 @@ namespace api.fefarm.mx.Controllers
 
                 if (HttpContext.Current.Request.Files.Count > 0)
                 {
-                    FileUtils.ReplaceFile(pdf.Requirements_PDF_Path, HttpContext.Current.Request, "RequirementsPDF", ref statusCode, ref dict, ref filenames);
+                    FileUtils.ReplaceFile(pdf.Requirements_PDF_Path, HttpContext.Current.Request, "~/PDFs/RequirementsPDF", ref statusCode, ref dict, ref filenames);
                     pdf.Requirements_PDF_Path = "PDFs/RequirementsPDF/" + filenames[0];
                 }
 

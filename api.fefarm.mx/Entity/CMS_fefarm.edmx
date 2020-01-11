@@ -13,6 +13,31 @@
           <Property Name="Admin_User_Username" Type="nvarchar" MaxLength="512" Nullable="false" />
           <Property Name="Admin_User_Password" Type="varbinary(max)" Nullable="false" />
         </EntityType>
+        <EntityType Name="cat_Application_Files">
+          <Key>
+            <PropertyRef Name="Application_File_Id" />
+          </Key>
+          <Property Name="Application_File_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Application_File_Path" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Application_File_Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Application_File_Upload_Date" Type="datetime" Nullable="false" />
+          <Property Name="Application_Id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="cat_Applications">
+          <Key>
+            <PropertyRef Name="Application_Id" />
+          </Key>
+          <Property Name="Application_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Application_Date" Type="datetime" Nullable="false" />
+          <Property Name="Application_Stage_Date" Type="datetime" Nullable="false" />
+          <Property Name="Application_Stage_Id" Type="int" Nullable="false" />
+          <Property Name="Application_JSON_Body" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Application_Score" Type="int" />
+          <Property Name="Application_Applicant_Name" Type="nvarchar" MaxLength="512" />
+          <Property Name="Application_Applicant_Email" Type="nvarchar" MaxLength="255" />
+          <Property Name="Application_Applicant_Phone" Type="nvarchar" MaxLength="125" />
+          <Property Name="Application_PDF_Path" Type="nvarchar" MaxLength="255" />
+        </EntityType>
         <EntityType Name="cat_Evidences_PDF">
           <Key>
             <PropertyRef Name="Evidences_PDF_Id" />
@@ -62,6 +87,47 @@
           <Property Name="Rules_PDF_Path" Type="nvarchar" MaxLength="512" Nullable="false" />
           <Property Name="Rules_PDF_Upload_Date" Type="datetime" />
         </EntityType>
+        <EntityType Name="cat_Application_Stages">
+          <Key>
+            <PropertyRef Name="Application_Stage_Id" />
+          </Key>
+          <Property Name="Application_Stage_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Application_Stage_Name" Type="nvarchar" MaxLength="125" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Applications' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vw_Applications">
+          <Key>
+            <PropertyRef Name="Application_Id" />
+            <PropertyRef Name="Application_Stage_Id" />
+          </Key>
+          <Property Name="Application_Id" Type="int" Nullable="false" />
+          <Property Name="Application_Score" Type="int" />
+          <Property Name="Application_Applicant_Name" Type="nvarchar" MaxLength="512" />
+          <Property Name="Application_Applicant_Email" Type="nvarchar" MaxLength="255" />
+          <Property Name="Application_Applicant_Phone" Type="nvarchar" MaxLength="125" />
+          <Property Name="Application_PDF_Path" Type="nvarchar" MaxLength="255" />
+          <Property Name="Application_Date" Type="varchar" MaxLength="30" />
+          <Property Name="Application_Stage_Id" Type="int" Nullable="false" />
+          <Property Name="Application_Stage_Name" Type="nvarchar" MaxLength="125" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_OpenRequestTemplates' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vw_OpenRequestTemplates">
+          <Key>
+            <PropertyRef Name="Request_Id" />
+            <PropertyRef Name="Request_Name" />
+            <PropertyRef Name="Request_JSON_Body" />
+          </Key>
+          <Property Name="Request_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Request_Name" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="Request_JSON_Body" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Request_Creation_Date" Type="varchar" MaxLength="30" />
+          <Property Name="Request_Start_Date" Type="varchar" MaxLength="30" />
+          <Property Name="Request_Finish_Date" Type="varchar" MaxLength="30" />
+          <Property Name="Request_Max_Applications" Type="int" />
+          <Property Name="Request_Max_Beneficiaries" Type="int" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Requests' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vw_Requests">
@@ -79,13 +145,65 @@ warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Requests' does not ha
           <Property Name="Request_Max_Applications" Type="int" />
           <Property Name="Request_Max_Beneficiaries" Type="int" />
         </EntityType>
+        <Association Name="FK__cat_Appli__Appli__66603565">
+          <End Role="cat_Application_Stages" Type="Self.cat_Application_Stages" Multiplicity="1" />
+          <End Role="cat_Applications" Type="Self.cat_Applications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cat_Application_Stages">
+              <PropertyRef Name="Application_Stage_Id" />
+            </Principal>
+            <Dependent Role="cat_Applications">
+              <PropertyRef Name="Application_Stage_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__cat_Appli__Appli__6A30C649">
+          <End Role="cat_Applications" Type="Self.cat_Applications" Multiplicity="1" />
+          <End Role="cat_Application_Files" Type="Self.cat_Application_Files" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cat_Applications">
+              <PropertyRef Name="Application_Id" />
+            </Principal>
+            <Dependent Role="cat_Application_Files">
+              <PropertyRef Name="Application_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="CMS_fefarmModelStoreContainer">
           <EntitySet Name="cat_Admin_Users" EntityType="Self.cat_Admin_Users" Schema="fefarmmx_admin" store:Type="Tables" />
+          <EntitySet Name="cat_Application_Files" EntityType="Self.cat_Application_Files" Schema="fefarmmx_admin" store:Type="Tables" />
+          <EntitySet Name="cat_Applications" EntityType="Self.cat_Applications" Schema="fefarmmx_admin" store:Type="Tables" />
           <EntitySet Name="cat_Evidences_PDF" EntityType="Self.cat_Evidences_PDF" Schema="fefarmmx_admin" store:Type="Tables" />
           <EntitySet Name="cat_Grant_PDF" EntityType="Self.cat_Grant_PDF" Schema="fefarmmx_admin" store:Type="Tables" />
           <EntitySet Name="cat_Requests" EntityType="Self.cat_Requests" Schema="fefarmmx_admin" store:Type="Tables" />
           <EntitySet Name="cat_Requirements_PDF" EntityType="Self.cat_Requirements_PDF" Schema="fefarmmx_admin" store:Type="Tables" />
           <EntitySet Name="cat_Rules_PDF" EntityType="Self.cat_Rules_PDF" Schema="fefarmmx_admin" store:Type="Tables" />
+          <EntitySet Name="cat_Application_Stages" EntityType="Self.cat_Application_Stages" Schema="lookup" store:Type="Tables" />
+          <EntitySet Name="vw_Applications" EntityType="Self.vw_Applications" store:Type="Views" store:Schema="fefarmmx_admin">
+            <DefiningQuery>SELECT 
+    [vw_Applications].[Application_Id] AS [Application_Id], 
+    [vw_Applications].[Application_Score] AS [Application_Score], 
+    [vw_Applications].[Application_Applicant_Name] AS [Application_Applicant_Name], 
+    [vw_Applications].[Application_Applicant_Email] AS [Application_Applicant_Email], 
+    [vw_Applications].[Application_Applicant_Phone] AS [Application_Applicant_Phone], 
+    [vw_Applications].[Application_PDF_Path] AS [Application_PDF_Path], 
+    [vw_Applications].[Application_Date] AS [Application_Date], 
+    [vw_Applications].[Application_Stage_Id] AS [Application_Stage_Id], 
+    [vw_Applications].[Application_Stage_Name] AS [Application_Stage_Name]
+    FROM [fefarmmx_admin].[vw_Applications] AS [vw_Applications]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vw_OpenRequestTemplates" EntityType="Self.vw_OpenRequestTemplates" store:Type="Views" store:Schema="fefarmmx_admin">
+            <DefiningQuery>SELECT 
+    [vw_OpenRequestTemplates].[Request_Id] AS [Request_Id], 
+    [vw_OpenRequestTemplates].[Request_Name] AS [Request_Name], 
+    [vw_OpenRequestTemplates].[Request_JSON_Body] AS [Request_JSON_Body], 
+    [vw_OpenRequestTemplates].[Request_Creation_Date] AS [Request_Creation_Date], 
+    [vw_OpenRequestTemplates].[Request_Start_Date] AS [Request_Start_Date], 
+    [vw_OpenRequestTemplates].[Request_Finish_Date] AS [Request_Finish_Date], 
+    [vw_OpenRequestTemplates].[Request_Max_Applications] AS [Request_Max_Applications], 
+    [vw_OpenRequestTemplates].[Request_Max_Beneficiaries] AS [Request_Max_Beneficiaries]
+    FROM [fefarmmx_admin].[vw_OpenRequestTemplates] AS [vw_OpenRequestTemplates]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="vw_Requests" EntityType="Self.vw_Requests" store:Type="Views" store:Schema="fefarmmx_admin">
             <DefiningQuery>SELECT 
     [vw_Requests].[Request_Id] AS [Request_Id], 
@@ -98,6 +216,14 @@ warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Requests' does not ha
     [vw_Requests].[Request_Max_Beneficiaries] AS [Request_Max_Beneficiaries]
     FROM [fefarmmx_admin].[vw_Requests] AS [vw_Requests]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK__cat_Appli__Appli__66603565" Association="Self.FK__cat_Appli__Appli__66603565">
+            <End Role="cat_Application_Stages" EntitySet="cat_Application_Stages" />
+            <End Role="cat_Applications" EntitySet="cat_Applications" />
+          </AssociationSet>
+          <AssociationSet Name="FK__cat_Appli__Appli__6A30C649" Association="Self.FK__cat_Appli__Appli__6A30C649">
+            <End Role="cat_Applications" EntitySet="cat_Applications" />
+            <End Role="cat_Application_Files" EntitySet="cat_Application_Files" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -128,6 +254,19 @@ warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Requests' does not ha
           <EntitySet Name="cat_Rules_PDF" EntityType="CMS_fefarmModel.cat_Rules_PDF" />
           <EntitySet Name="cat_Requests" EntityType="CMS_fefarmModel.cat_Requests" />
           <EntitySet Name="vw_Requests" EntityType="CMS_fefarmModel.vw_Requests" />
+          <EntitySet Name="cat_Application_Files" EntityType="CMS_fefarmModel.cat_Application_Files" />
+          <EntitySet Name="cat_Applications" EntityType="CMS_fefarmModel.cat_Applications" />
+          <EntitySet Name="cat_Application_Stages" EntityType="CMS_fefarmModel.cat_Application_Stages" />
+          <AssociationSet Name="FK__cat_Appli__Appli__6A30C649" Association="CMS_fefarmModel.FK__cat_Appli__Appli__6A30C649">
+            <End Role="cat_Applications" EntitySet="cat_Applications" />
+            <End Role="cat_Application_Files" EntitySet="cat_Application_Files" />
+          </AssociationSet>
+          <AssociationSet Name="FK__cat_Appli__Appli__66603565" Association="CMS_fefarmModel.FK__cat_Appli__Appli__66603565">
+            <End Role="cat_Application_Stages" EntitySet="cat_Application_Stages" />
+            <End Role="cat_Applications" EntitySet="cat_Applications" />
+          </AssociationSet>
+          <EntitySet Name="vw_OpenRequestTemplates" EntityType="CMS_fefarmModel.vw_OpenRequestTemplates" />
+          <EntitySet Name="vw_Applications" EntityType="CMS_fefarmModel.vw_Applications" />
         </EntityContainer>
         <EntityType Name="cat_Evidences_PDF">
           <Key>
@@ -183,6 +322,96 @@ warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Requests' does not ha
           <Property Name="Request_Finish_Date" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Request_Max_Applications" Type="Int32" />
           <Property Name="Request_Max_Beneficiaries" Type="Int32" />
+        </EntityType>
+        <EntityType Name="cat_Application_Files">
+          <Key>
+            <PropertyRef Name="Application_File_Id" />
+          </Key>
+          <Property Name="Application_File_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Application_File_Path" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Application_File_Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Application_File_Upload_Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Application_Id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="cat_Applications" Relationship="CMS_fefarmModel.FK__cat_Appli__Appli__6A30C649" FromRole="cat_Application_Files" ToRole="cat_Applications" />
+        </EntityType>
+        <EntityType Name="cat_Applications">
+          <Key>
+            <PropertyRef Name="Application_Id" />
+          </Key>
+          <Property Name="Application_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Application_Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Application_Stage_Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Application_Stage_Id" Type="Int32" Nullable="false" />
+          <Property Name="Application_JSON_Body" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="cat_Application_Files" Relationship="CMS_fefarmModel.FK__cat_Appli__Appli__6A30C649" FromRole="cat_Applications" ToRole="cat_Application_Files" />
+          <NavigationProperty Name="cat_Application_Stages" Relationship="CMS_fefarmModel.FK__cat_Appli__Appli__66603565" FromRole="cat_Applications" ToRole="cat_Application_Stages" />
+          <Property Name="Application_Score" Type="Int32" />
+          <Property Name="Application_Applicant_Name" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="Application_Applicant_Email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Application_Applicant_Phone" Type="String" MaxLength="125" FixedLength="false" Unicode="true" />
+          <Property Name="Application_PDF_Path" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="cat_Application_Stages">
+          <Key>
+            <PropertyRef Name="Application_Stage_Id" />
+          </Key>
+          <Property Name="Application_Stage_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Application_Stage_Name" Type="String" MaxLength="125" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="cat_Applications" Relationship="CMS_fefarmModel.FK__cat_Appli__Appli__66603565" FromRole="cat_Application_Stages" ToRole="cat_Applications" />
+        </EntityType>
+        <Association Name="FK__cat_Appli__Appli__6A30C649">
+          <End Type="CMS_fefarmModel.cat_Applications" Role="cat_Applications" Multiplicity="1" />
+          <End Type="CMS_fefarmModel.cat_Application_Files" Role="cat_Application_Files" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cat_Applications">
+              <PropertyRef Name="Application_Id" />
+            </Principal>
+            <Dependent Role="cat_Application_Files">
+              <PropertyRef Name="Application_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__cat_Appli__Appli__66603565">
+          <End Type="CMS_fefarmModel.cat_Application_Stages" Role="cat_Application_Stages" Multiplicity="1" />
+          <End Type="CMS_fefarmModel.cat_Applications" Role="cat_Applications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cat_Application_Stages">
+              <PropertyRef Name="Application_Stage_Id" />
+            </Principal>
+            <Dependent Role="cat_Applications">
+              <PropertyRef Name="Application_Stage_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="vw_OpenRequestTemplates">
+          <Key>
+            <PropertyRef Name="Request_Id" />
+            <PropertyRef Name="Request_Name" />
+            <PropertyRef Name="Request_JSON_Body" />
+          </Key>
+          <Property Name="Request_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Request_Name" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="Request_JSON_Body" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Request_Creation_Date" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Request_Start_Date" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Request_Finish_Date" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Request_Max_Applications" Type="Int32" />
+          <Property Name="Request_Max_Beneficiaries" Type="Int32" />
+        </EntityType>
+        <EntityType Name="vw_Applications">
+          <Key>
+            <PropertyRef Name="Application_Id" />
+            <PropertyRef Name="Application_Stage_Id" />
+          </Key>
+          <Property Name="Application_Id" Type="Int32" Nullable="false" />
+          <Property Name="Application_Score" Type="Int32" />
+          <Property Name="Application_Applicant_Name" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="Application_Applicant_Email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Application_Applicant_Phone" Type="String" MaxLength="125" FixedLength="false" Unicode="true" />
+          <Property Name="Application_PDF_Path" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Application_Date" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Application_Stage_Id" Type="Int32" Nullable="false" />
+          <Property Name="Application_Stage_Name" Type="String" MaxLength="125" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -264,6 +493,70 @@ warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Requests' does not ha
                 <ScalarProperty Name="Request_JSON_Body" ColumnName="Request_JSON_Body" />
                 <ScalarProperty Name="Request_Name" ColumnName="Request_Name" />
                 <ScalarProperty Name="Request_Id" ColumnName="Request_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cat_Application_Files">
+            <EntityTypeMapping TypeName="CMS_fefarmModel.cat_Application_Files">
+              <MappingFragment StoreEntitySet="cat_Application_Files">
+                <ScalarProperty Name="Application_Id" ColumnName="Application_Id" />
+                <ScalarProperty Name="Application_File_Upload_Date" ColumnName="Application_File_Upload_Date" />
+                <ScalarProperty Name="Application_File_Name" ColumnName="Application_File_Name" />
+                <ScalarProperty Name="Application_File_Path" ColumnName="Application_File_Path" />
+                <ScalarProperty Name="Application_File_Id" ColumnName="Application_File_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cat_Applications">
+            <EntityTypeMapping TypeName="CMS_fefarmModel.cat_Applications">
+              <MappingFragment StoreEntitySet="cat_Applications">
+                <ScalarProperty Name="Application_PDF_Path" ColumnName="Application_PDF_Path" />
+                <ScalarProperty Name="Application_Applicant_Phone" ColumnName="Application_Applicant_Phone" />
+                <ScalarProperty Name="Application_Applicant_Email" ColumnName="Application_Applicant_Email" />
+                <ScalarProperty Name="Application_Applicant_Name" ColumnName="Application_Applicant_Name" />
+                <ScalarProperty Name="Application_Score" ColumnName="Application_Score" />
+                <ScalarProperty Name="Application_JSON_Body" ColumnName="Application_JSON_Body" />
+                <ScalarProperty Name="Application_Stage_Id" ColumnName="Application_Stage_Id" />
+                <ScalarProperty Name="Application_Stage_Date" ColumnName="Application_Stage_Date" />
+                <ScalarProperty Name="Application_Date" ColumnName="Application_Date" />
+                <ScalarProperty Name="Application_Id" ColumnName="Application_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cat_Application_Stages">
+            <EntityTypeMapping TypeName="CMS_fefarmModel.cat_Application_Stages">
+              <MappingFragment StoreEntitySet="cat_Application_Stages">
+                <ScalarProperty Name="Application_Stage_Name" ColumnName="Application_Stage_Name" />
+                <ScalarProperty Name="Application_Stage_Id" ColumnName="Application_Stage_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vw_OpenRequestTemplates">
+            <EntityTypeMapping TypeName="CMS_fefarmModel.vw_OpenRequestTemplates">
+              <MappingFragment StoreEntitySet="vw_OpenRequestTemplates">
+                <ScalarProperty Name="Request_Max_Beneficiaries" ColumnName="Request_Max_Beneficiaries" />
+                <ScalarProperty Name="Request_Max_Applications" ColumnName="Request_Max_Applications" />
+                <ScalarProperty Name="Request_Finish_Date" ColumnName="Request_Finish_Date" />
+                <ScalarProperty Name="Request_Start_Date" ColumnName="Request_Start_Date" />
+                <ScalarProperty Name="Request_Creation_Date" ColumnName="Request_Creation_Date" />
+                <ScalarProperty Name="Request_JSON_Body" ColumnName="Request_JSON_Body" />
+                <ScalarProperty Name="Request_Name" ColumnName="Request_Name" />
+                <ScalarProperty Name="Request_Id" ColumnName="Request_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vw_Applications">
+            <EntityTypeMapping TypeName="CMS_fefarmModel.vw_Applications">
+              <MappingFragment StoreEntitySet="vw_Applications">
+                <ScalarProperty Name="Application_Stage_Name" ColumnName="Application_Stage_Name" />
+                <ScalarProperty Name="Application_Stage_Id" ColumnName="Application_Stage_Id" />
+                <ScalarProperty Name="Application_Date" ColumnName="Application_Date" />
+                <ScalarProperty Name="Application_PDF_Path" ColumnName="Application_PDF_Path" />
+                <ScalarProperty Name="Application_Applicant_Phone" ColumnName="Application_Applicant_Phone" />
+                <ScalarProperty Name="Application_Applicant_Email" ColumnName="Application_Applicant_Email" />
+                <ScalarProperty Name="Application_Applicant_Name" ColumnName="Application_Applicant_Name" />
+                <ScalarProperty Name="Application_Score" ColumnName="Application_Score" />
+                <ScalarProperty Name="Application_Id" ColumnName="Application_Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -1,24 +1,22 @@
 ﻿using api.fefarm.mx.Entity;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
-using Utils;
 
 namespace api.fefarm.mx.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class RequestsController : ApiController
     {
+        #region Request Templates
         [HttpPost]
-        [Route("Requests/AddRequest")]
-        public async Task<HttpResponseMessage> AddRequest([FromBody] cat_Requests json)
+        [Route("Requests/AddRequestTemplate")]
+        public async Task<HttpResponseMessage> AddRequestTemplate([FromBody] cat_Requests json)
         {
             Dictionary<string, object> dict = new Dictionary<string, object>();
             CMS_fefarmEntities entity = new CMS_fefarmEntities();
@@ -57,7 +55,7 @@ namespace api.fefarm.mx.Controllers
         }
 
         [HttpPost]
-        [Route("Requests/UpdateRequest")]
+        [Route("Requests/UpdateRequestTemplate")]
         public async Task<HttpResponseMessage> UpdateRequest([FromBody] cat_Requests json)
         {
             Dictionary<string, object> dict = new Dictionary<string, object>();
@@ -93,8 +91,8 @@ namespace api.fefarm.mx.Controllers
         }
 
         [HttpPost]
-        [Route("Requests/DeleteRequest")]
-        public async Task<HttpResponseMessage> DeleteRequest([FromBody]cat_Requests json)
+        [Route("Requests/DeleteRequestTemplate")]
+        public async Task<HttpResponseMessage> DeleteRequestTemplate([FromBody]cat_Requests json)
         {
             Dictionary<string, object> dict = new Dictionary<string, object>();
             CMS_fefarmEntities entity = new CMS_fefarmEntities();
@@ -123,13 +121,34 @@ namespace api.fefarm.mx.Controllers
         }
 
         [HttpGet]
-        [Route("Requests/GetRequests")]
-        public async Task<List<vw_Requests>> GetRequests()
+        [Route("Requests/GetRequestTemplates")]
+        public async Task<List<vw_Requests>> GetRequestTemplates()
         {
             CMS_fefarmEntities entity = new CMS_fefarmEntities();
 
             await Task.CompletedTask;
             return entity.vw_Requests.ToList();
         }
+
+        [HttpGet]
+        [Route("Requests/GetOpenRequestTemplates")]
+        public async Task<List<vw_OpenRequestTemplates>> GetOpenRequestTemplates()
+        {
+            CMS_fefarmEntities entity = new CMS_fefarmEntities();
+
+            await Task.CompletedTask;
+            return entity.vw_OpenRequestTemplates.OrderBy(x => x.Request_Start_Date).ToList();
+        }
+
+        [HttpGet]
+        [Route("Requests/GetRequestTemplate/{Request_Id}")]
+        public async Task<vw_Requests> GetRequestTemplate(int Request_Id)
+        {
+            CMS_fefarmEntities entity = new CMS_fefarmEntities();
+
+            await Task.CompletedTask;
+            return entity.vw_Requests.FirstOrDefault(x => x.Request_Id == Request_Id);
+        }
+        #endregion
     }
 }

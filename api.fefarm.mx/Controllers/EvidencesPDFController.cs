@@ -30,7 +30,7 @@ namespace api.fefarm.mx.Controllers
                 string jsonString = HttpContext.Current.Request.Form["cat_Evidences_PDF"];
                 cat_Evidences_PDF json = JsonConvert.DeserializeObject<cat_Evidences_PDF>(jsonString);
 
-                FileUtils.UploadPDF(HttpContext.Current.Request, "EvidencesPDF", ref statusCode, ref dict, ref filenames);
+                FileUtils.UploadFiles(HttpContext.Current.Request, "~/PDFs/EvidencesPDF", ref statusCode, ref dict, ref filenames);
 
                 var pdf = new cat_Evidences_PDF()
                 {
@@ -73,7 +73,7 @@ namespace api.fefarm.mx.Controllers
 
                 if (HttpContext.Current.Request.Files.Count > 0)
                 {
-                    FileUtils.ReplaceFile(pdf.Evidences_PDF_Path, HttpContext.Current.Request, "EvidencesPDF", ref statusCode, ref dict, ref filenames);
+                    FileUtils.ReplaceFile(pdf.Evidences_PDF_Path, HttpContext.Current.Request, "~/PDFs/EvidencesPDF", ref statusCode, ref dict, ref filenames);
                     pdf.Evidences_PDF_Path = "PDFs/EvidencesPDF/" + filenames[0];
                 }
 

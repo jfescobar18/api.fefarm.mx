@@ -8,13 +8,13 @@ namespace Utils
 {
     public class FileUtils
     {
-        public static void UploadPDF(HttpRequest httpRequest, string folder, ref HttpStatusCode statusCode, ref Dictionary<string, object> dict, ref List<string> filenames)
+        public static void UploadFiles(HttpRequest httpRequest, string folder, ref HttpStatusCode statusCode, ref Dictionary<string, object> dict, ref List<string> filenames)
         {
             try
             {
-                if (!Directory.Exists(HttpContext.Current.Server.MapPath($"~/PDFs/{folder}")))
+                if (!Directory.Exists(HttpContext.Current.Server.MapPath(folder)))
                 {
-                    Directory.CreateDirectory(HttpContext.Current.Server.MapPath($"~/PDFs/{folder}"));
+                    Directory.CreateDirectory(HttpContext.Current.Server.MapPath(folder));
                 }
 
                 if (httpRequest.Files.Count > 0)
@@ -25,24 +25,26 @@ namespace Utils
                         if (postedFile != null && postedFile.ContentLength > 0)
                         {
                             int MaxContentLength = 1024 * 1024 * 10;
-                            IList<string> AllowedFileExtensions = new List<string> { ".pdf" };
+                            IList<string> AllowedFileExtensions = new List<string> { ".pdf", ".png", ".jpg", ".jpeg" };
                             string ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.')),
                             extension = ext.ToLower();
                             if (!AllowedFileExtensions.Contains(extension))
                             {
-                                dict.Add("message", "Please upload files of type .pdf");
+                                dict.Add("message", "Please upload files of type .pdf, .png, .jpg or .jpeg");
                                 statusCode = HttpStatusCode.BadRequest;
                             }
                             else if (postedFile.ContentLength > MaxContentLength)
                             {
-                                dict.Add("message", "Please upload a PDF upto 10 mb");
+                                dict.Add("message", "Please upload a file upto 10 mb");
                                 statusCode = HttpStatusCode.BadRequest;
                             }
                             else
                             {
-                                postedFile.SaveAs(HttpContext.Current.Server.MapPath($"~/PDFs/{folder}/" + postedFile.FileName));
+                                postedFile.SaveAs(HttpContext.Current.Server.MapPath(folder + postedFile.FileName));
                                 filenames.Add(postedFile.FileName);
-                                dict.Add("message", "PDF updated Successfully");
+                                if (!dict.ContainsKey("message")) {
+                                    dict.Add("message", "File updated Successfully");
+                                }
                                 statusCode = HttpStatusCode.OK;
                             }
                         }
@@ -50,7 +52,7 @@ namespace Utils
                 }
                 else
                 {
-                    dict.Add("message", "Please upload a PDF");
+                    dict.Add("message", "Please upload a File");
                     statusCode = HttpStatusCode.BadRequest;
                 }
             }
@@ -81,7 +83,7 @@ namespace Utils
         public static void ReplaceFile(string path, HttpRequest httpRequest, string folder, ref HttpStatusCode statusCode, ref Dictionary<string, object> dict, ref List<string> filenames)
         {
             DeleteFile(path);
-            UploadPDF(httpRequest, folder, ref statusCode, ref dict, ref filenames);
+            UploadFiles(httpRequest, folder, ref statusCode, ref dict, ref filenames);
         }
     }
 }

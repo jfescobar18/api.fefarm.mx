@@ -1,4 +1,6 @@
 ﻿using api.fefarm.mx.Entity;
+using api.fefarm.mx.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -148,6 +150,49 @@ namespace api.fefarm.mx.Controllers
 
             await Task.CompletedTask;
             return entity.vw_Requests.FirstOrDefault(x => x.Request_Id == Request_Id);
+        }
+
+        [HttpGet]
+        [Route("Requests/CheckTemplate/{Request_Id}")]
+        public async Task<HttpResponseMessage> CheckTemplate(int Request_Id)
+        {
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            CMS_fefarmEntities entity = new CMS_fefarmEntities();
+            HttpStatusCode statusCode = HttpStatusCode.BadRequest;
+
+            try
+            {
+                var request = entity.cat_Requests.SingleOrDefault(x => x.Request_Id == Request_Id);
+
+                List<RequestModel> requestResults = JsonConvert.DeserializeObject<List<RequestModel>>(request.Request_JSON_Body);
+                dict.Add("FailedInput", new Dictionary<string, object>());
+
+                foreach (var input in requestResults)
+                {
+                    int totalValues = input.values.array.Count;
+                    int totalPoint = input.points.array.Count;
+
+                    if (totalValues != totalPoint && input.points.@string.Length > 0)
+                    {
+                        string values = string.Join(",", input.values.array);
+                        string points = string.Join(",", input.points.array);
+                        dict.Add($"FailedInput-{input.id}", $"Label: {input.label}, Values Count: {totalValues}, Points Count: {totalPoint}, Values: {values}, Points: {points}");
+                    }
+                }
+
+                statusCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                if (dict.Keys.Count > 0)
+                {
+                    dict = new Dictionary<string, object>();
+                    dict.Add("message", ex.Message);
+                }
+            }
+
+            await Task.CompletedTask;
+            return Request.CreateResponse(statusCode, dict);
         }
         #endregion
     }

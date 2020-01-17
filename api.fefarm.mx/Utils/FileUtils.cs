@@ -40,7 +40,7 @@ namespace Utils
                             }
                             else
                             {
-                                postedFile.SaveAs(HttpContext.Current.Server.MapPath(folder + postedFile.FileName));
+                                postedFile.SaveAs(HttpContext.Current.Server.MapPath(folder + "/" + postedFile.FileName));
                                 filenames.Add(postedFile.FileName);
                                 if (!dict.ContainsKey("message")) {
                                     dict.Add("message", "File updated Successfully");
@@ -52,7 +52,10 @@ namespace Utils
                 }
                 else
                 {
-                    dict.Add("message", "Please upload a File");
+                    if (!dict.ContainsKey("message"))
+                    {
+                        dict.Add("message", "Please upload a File");
+                    }
                     statusCode = HttpStatusCode.BadRequest;
                 }
             }

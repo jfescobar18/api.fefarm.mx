@@ -30,6 +30,7 @@ namespace api.fefarm.mx.Entity
         public string Application_Applicant_Email { get; set; }
         public string Application_Applicant_Phone { get; set; }
         public string Application_PDF_Path { get; set; }
+        public string Application_Applicant_CURP { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<cat_Application_Files> cat_Application_Files { get; set; }

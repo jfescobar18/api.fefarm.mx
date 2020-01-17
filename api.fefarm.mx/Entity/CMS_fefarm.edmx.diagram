@@ -4,21 +4,22 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5eaf323900b94d048de1559104ce3b68" Name="Diagram1">
-        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Admin_Users" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Grant_PDF" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Evidences_PDF" Width="1.5" PointX="0.75" PointY="3.75" />
-        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Requirements_PDF" Width="1.5" PointX="2.75" PointY="3.75" />
-        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Rules_PDF" Width="1.5" PointX="4.75" PointY="3.75" />
-        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Requests" Width="1.5" PointX="0.75" PointY="6.75" />
-        <EntityTypeShape EntityType="CMS_fefarmModel.vw_Requests" Width="1.5" PointX="3.375" PointY="6.75" />
-        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Application_Files" Width="1.5" PointX="9.875" PointY="7" />
-        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Applications" Width="1.5" PointX="7.625" PointY="7" />
-        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Application_Stages" Width="1.5" PointX="5.375" PointY="7.375" />
-        <AssociationConnector Association="CMS_fefarmModel.FK__cat_Appli__Appli__6A30C649" />
-        <AssociationConnector Association="CMS_fefarmModel.FK__cat_Appli__Appli__66603565" />
-        <EntityTypeShape EntityType="CMS_fefarmModel.vw_OpenRequestTemplates" Width="1.5" PointX="7.375" PointY="0.75" />
-        <EntityTypeShape EntityType="CMS_fefarmModel.vw_Applications" Width="1.5" PointX="9.375" PointY="0.75" />
+      <Diagram DiagramId="71f076badc124f828741cf9bb95c9cab" Name="Diagram1">
+        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Admin_Users" Width="1.5" PointX="0.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Application_Files" Width="1.5" PointX="5.25" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Applications" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Evidences_PDF" Width="1.5" PointX="2.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Grant_PDF" Width="1.5" PointX="5.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMS_fefarmModel.cat_News_PDF" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Requests" Width="1.5" PointX="7.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Requirements_PDF" Width="1.5" PointX="4.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Rules_PDF" Width="1.5" PointX="6.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMS_fefarmModel.cat_Application_Stages" Width="1.5" PointX="0.75" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMS_fefarmModel.vw_Requests" Width="1.5" PointX="8.75" PointY="7.75" IsExpanded="true" />
+        <AssociationConnector Association="CMS_fefarmModel.FK__cat_Appli__Appli__534D60F1" ManuallyRouted="false" />
+        <AssociationConnector Association="CMS_fefarmModel.FK__cat_Appli__Appli__5441852A" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="CMS_fefarmModel.vw_OpenRequestTemplates" Width="1.5" PointX="10.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CMS_fefarmModel.vw_Applications" Width="1.5" PointX="0.75" PointY="8.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

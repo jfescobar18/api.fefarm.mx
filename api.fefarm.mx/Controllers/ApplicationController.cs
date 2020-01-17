@@ -36,10 +36,18 @@ namespace api.fefarm.mx.Controllers
             string applicantName = requestResults.Where(x => x.label == "Nombre").Select(x => x.answers[0]).FirstOrDefault();
             string applicantEmail = requestResults.Where(x => x.label == "Correo electrónico").Select(x => x.answers[0]).FirstOrDefault();
             string applicantPhone = requestResults.Where(x => x.label == "Teléfono celular").Select(x => x.answers[0]).FirstOrDefault();
+            string CURP = requestResults.Where(x => x.label == "CURP").Select(x => x.answers[0]).FirstOrDefault();
+
+            var applicationsLsit = entity.cat_Applications.Where(x => x.Application_Applicant_CURP == CURP).ToList();
+            if(applicationsLsit != null)
+            {
+                statusCode = HttpStatusCode.BadRequest;
+                dict.Add("error", "NotNull");
+                await Task.CompletedTask;
+                return Request.CreateResponse(statusCode, dict);
+            }
 
             int Score = ApplicationUtils.GetScore(requestResults);
-            string pdfPath = ApplicationUtils.CreateReport(requestResults);
-
             try
             {
                 var application = new cat_Applications()
@@ -51,14 +59,17 @@ namespace api.fefarm.mx.Controllers
                     Application_Applicant_Name = applicantName,
                     Application_Applicant_Email = applicantEmail,
                     Application_Applicant_Phone = applicantPhone,
+                    Application_Applicant_CURP = CURP,
                     Application_Score = Score,
-                    Application_PDF_Path = pdfPath
+                    Application_PDF_Path = string.Empty
                 };
 
                 entity.cat_Applications.Add(application);
                 entity.SaveChanges();
 
                 FileUtils.UploadFiles(HttpContext.Current.Request, $"~/ApplicationFiles/Id-{application.Application_Id}", ref statusCode, ref dict, ref filenames);
+                ApplicationUtils.CreateReport(requestResults, application.Application_Id);
+
                 foreach (string filename in filenames)
                 {
                     var applicationFile = new cat_Application_Files()
@@ -66,21 +77,27 @@ namespace api.fefarm.mx.Controllers
                         Application_File_Path = $"ApplicationFiles/Id-{application.Application_Id}/{filename}",
                         Application_File_Name = filename.Replace(".pdf", ""),
                         Application_File_Upload_Date = DateTime.Now,
-                        Application_Id = application.Application_Stage_Id
+                        Application_Id = application.Application_Id
                     };
                     entity.cat_Application_Files.Add(applicationFile);
                 }
+
+                application.Application_PDF_Path = $"PDF-Applications/ApplicationId-{application.Application_Id}/application.pdf";
                 entity.SaveChanges();
 
                 statusCode = HttpStatusCode.OK;
-                dict.Add("message", "Application added successfully");
+                if (!dict.ContainsKey("message"))
+                {
+                    dict.Add("message", "Application added successfully");
+                }
+                dict.Add("IdNumber", DateTime.Now.ToString("yyyyMMdd") + application.Application_Id);
             }
             catch (Exception ex)
             {
                 if (dict.Keys.Count > 0)
                 {
                     dict = new Dictionary<string, object>();
-                    dict.Add("message", ex.Message);
+                    dict.Add("messageException", ex.Message);
                 }
             }
 
@@ -206,11 +223,189 @@ namespace api.fefarm.mx.Controllers
             }
             catch (Exception ex)
             {
+                dict.Add("message", ex.Message);
+            }
+
+            await Task.CompletedTask;
+            return Request.CreateResponse(statusCode, dict);
+        }
+
+        [HttpGet]
+        [Route("Application/CreateReport/{Application_Id}")]
+        public async Task<HttpResponseMessage> CreateReport(int Application_Id)
+        {
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            CMS_fefarmEntities entity = new CMS_fefarmEntities();
+            HttpStatusCode statusCode = HttpStatusCode.BadRequest;
+
+            try
+            {
+                var application = entity.cat_Applications.FirstOrDefault(x => x.Application_Id == Application_Id);
+                string Application_JSON_Body = application.Application_JSON_Body;
+
+                List<RequestModel> requestResults = JsonConvert.DeserializeObject<List<RequestModel>>(Application_JSON_Body);
+                ApplicationUtils.CreateReport(requestResults, application.Application_Id);
+
+                statusCode = HttpStatusCode.OK;
+                dict.Add("url", $"PDF-Applications/ApplicationId-{Application_Id}/application.pdf");
+            }
+            catch (Exception ex)
+            {
                 if (dict.Keys.Count > 0)
                 {
                     dict = new Dictionary<string, object>();
                     dict.Add("message", ex.Message);
                 }
+            }
+
+            await Task.CompletedTask;
+            return Request.CreateResponse(statusCode, dict);
+        }
+
+        [HttpGet]
+        [Route("Application/FixApplications")]
+        public async Task<HttpResponseMessage> FixApplications()
+        {
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            CMS_fefarmEntities entity = new CMS_fefarmEntities();
+            HttpStatusCode statusCode = HttpStatusCode.BadRequest;
+
+            try
+            {
+                List<cat_Applications> Applications = entity.cat_Applications.ToList();
+
+                foreach (var application in Applications)
+                {
+                    string Application_JSON_Body = application.Application_JSON_Body;
+
+                    List<RequestModel> requestResults = JsonConvert.DeserializeObject<List<RequestModel>>(Application_JSON_Body);
+
+                    if(requestResults.Count > 0)
+                    {
+                        //var badInput = requestResults.FirstOrDefault(x => x.id == 130);
+                        //badInput.points.@string = "3,3,5,1";
+                        //badInput.points.array = new List<string>() { "3","3","5","1" };
+
+                        application.Application_JSON_Body = JsonConvert.SerializeObject(requestResults);
+                        entity.SaveChanges();
+                    }
+                }
+
+                statusCode = HttpStatusCode.OK;
+                dict.Add("message", "Inputs updated");
+            }
+            catch (Exception ex)
+            {
+                if (dict.Keys.Count > 0)
+                {
+                    dict = new Dictionary<string, object>();
+                    dict.Add("message", ex.Message);
+                }
+            }
+
+            await Task.CompletedTask;
+            return Request.CreateResponse(statusCode, dict);
+        }
+
+        [HttpGet]
+        [Route("Application/FixScore/{Application_Id}")]
+        public async Task<HttpResponseMessage> FixScore(int Application_Id)
+        {
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            CMS_fefarmEntities entity = new CMS_fefarmEntities();
+            HttpStatusCode statusCode = HttpStatusCode.BadRequest;
+
+            try
+            {
+                var application = entity.cat_Applications.FirstOrDefault(x => x.Application_Id == Application_Id);
+                string Application_JSON_Body = application.Application_JSON_Body;
+
+                List<RequestModel> requestResults = JsonConvert.DeserializeObject<List<RequestModel>>(Application_JSON_Body);
+                int score = ApplicationUtils.GetScore(requestResults);
+
+                application.Application_Score = score;
+                entity.SaveChanges();
+
+                statusCode = HttpStatusCode.OK;
+                dict.Add("message", "Score updated");
+            }
+            catch (Exception ex)
+            {
+                dict = new Dictionary<string, object>();
+                dict.Add("error", ex.Message);
+            }
+
+            await Task.CompletedTask;
+            return Request.CreateResponse(statusCode, dict);
+        }
+
+        [HttpGet]
+        [Route("Application/FixScores")]
+        public async Task<HttpResponseMessage> FixScores()
+        {
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            CMS_fefarmEntities entity = new CMS_fefarmEntities();
+            HttpStatusCode statusCode = HttpStatusCode.BadRequest;
+
+            try
+            {
+                List<cat_Applications> Applications = entity.cat_Applications.ToList();
+
+                foreach (var application in Applications)
+                {
+                    string Application_JSON_Body = application.Application_JSON_Body;
+
+                    List<RequestModel> requestResults = JsonConvert.DeserializeObject<List<RequestModel>>(Application_JSON_Body);
+                    int score = ApplicationUtils.GetScore(requestResults);
+
+                    application.Application_Score = score;
+                    entity.SaveChanges();
+                }
+
+                statusCode = HttpStatusCode.OK;
+                dict.Add("message", "Scores updated");
+            }
+            catch (Exception ex)
+            {
+                dict = new Dictionary<string, object>();
+                dict.Add("error", ex.Message);
+            }
+
+            await Task.CompletedTask;
+            return Request.CreateResponse(statusCode, dict);
+        }
+
+        [HttpGet]
+        [Route("Application/FixCURP")]
+        public async Task<HttpResponseMessage> FixCURP()
+        {
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            CMS_fefarmEntities entity = new CMS_fefarmEntities();
+            HttpStatusCode statusCode = HttpStatusCode.BadRequest;
+
+            try
+            {
+                List<cat_Applications> Applications = entity.cat_Applications.ToList();
+
+                foreach (var application in Applications)
+                {
+                    string Application_JSON_Body = application.Application_JSON_Body;
+
+                    List<RequestModel> requestResults = JsonConvert.DeserializeObject<List<RequestModel>>(Application_JSON_Body);
+
+                    string CURP = requestResults.Where(x => x.label == "CURP").Select(x => x.answers[0]).FirstOrDefault();
+
+                    application.Application_Applicant_CURP = CURP;
+                    entity.SaveChanges();
+                }
+
+                statusCode = HttpStatusCode.OK;
+                dict.Add("message", "Scores updated");
+            }
+            catch (Exception ex)
+            {
+                dict = new Dictionary<string, object>();
+                dict.Add("error", ex.Message);
             }
 
             await Task.CompletedTask;

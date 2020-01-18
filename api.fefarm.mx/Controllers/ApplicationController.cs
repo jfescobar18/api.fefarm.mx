@@ -30,7 +30,9 @@ namespace api.fefarm.mx.Controllers
             HttpStatusCode statusCode = HttpStatusCode.BadRequest;
             List<string> filenames = new List<string>();
 
+            int Request_Id = int.Parse(HttpContext.Current.Request.Form["Request_Id"]);
             string Application_JSON_Body = HttpContext.Current.Request.Form["Application_JSON_Body"];
+
             List<RequestModel> requestResults = JsonConvert.DeserializeObject<List<RequestModel>>(Application_JSON_Body);
 
             string applicantName = requestResults.Where(x => x.label == "Nombre").Select(x => x.answers[0]).FirstOrDefault();
@@ -61,7 +63,8 @@ namespace api.fefarm.mx.Controllers
                     Application_Applicant_Phone = applicantPhone,
                     Application_Applicant_CURP = CURP,
                     Application_Score = Score,
-                    Application_PDF_Path = string.Empty
+                    Application_PDF_Path = string.Empty,
+                    Request_Id = Request_Id
                 };
 
                 entity.cat_Applications.Add(application);
@@ -169,13 +172,13 @@ namespace api.fefarm.mx.Controllers
         }
 
         [HttpGet]
-        [Route("Application/GetApplications")]
-        public async Task<List<vw_Applications>> GetApplications()
+        [Route("Application/GetApplications/{Request_Id}")]
+        public async Task<List<vw_Applications>> GetApplications(int Request_Id)
         {
             CMS_fefarmEntities entity = new CMS_fefarmEntities();
 
             await Task.CompletedTask;
-            return entity.vw_Applications.OrderBy(x => x.Application_Score).ToList();
+            return entity.vw_Applications.OrderBy(x => x.Application_Score).Where(x => x.Request_Id == Request_Id).ToList();
         }
 
         [HttpGet]
@@ -231,8 +234,8 @@ namespace api.fefarm.mx.Controllers
         }
 
         [HttpGet]
-        [Route("Application/CreateReport/{Application_Id}")]
-        public async Task<HttpResponseMessage> CreateReport(int Application_Id)
+        [Route("Application/GetApplicationsExcel")]
+        public async Task<HttpResponseMessage> GetApplicationsExcel()
         {
             Dictionary<string, object> dict = new Dictionary<string, object>();
             CMS_fefarmEntities entity = new CMS_fefarmEntities();
@@ -240,22 +243,15 @@ namespace api.fefarm.mx.Controllers
 
             try
             {
-                var application = entity.cat_Applications.FirstOrDefault(x => x.Application_Id == Application_Id);
-                string Application_JSON_Body = application.Application_JSON_Body;
-
-                List<RequestModel> requestResults = JsonConvert.DeserializeObject<List<RequestModel>>(Application_JSON_Body);
-                ApplicationUtils.CreateReport(requestResults, application.Application_Id);
+                List<cat_Applications> Applications = entity.cat_Applications.ToList();
 
                 statusCode = HttpStatusCode.OK;
-                dict.Add("url", $"PDF-Applications/ApplicationId-{Application_Id}/application.pdf");
+                dict.Add("path", $"ExcelReport/report.xlsx");
+                dict.Add("filename", $"report.xlsx");
             }
             catch (Exception ex)
             {
-                if (dict.Keys.Count > 0)
-                {
-                    dict = new Dictionary<string, object>();
-                    dict.Add("message", ex.Message);
-                }
+                dict.Add("message", ex.Message);
             }
 
             await Task.CompletedTask;

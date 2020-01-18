@@ -38,6 +38,7 @@
           <Property Name="Application_Applicant_Phone" Type="nvarchar" MaxLength="125" />
           <Property Name="Application_PDF_Path" Type="nvarchar" MaxLength="255" />
           <Property Name="Application_Applicant_CURP" Type="nvarchar" MaxLength="125" />
+          <Property Name="Request_Id" Type="int" />
         </EntityType>
         <EntityType Name="cat_Evidences_PDF">
           <Key>
@@ -116,8 +117,10 @@ warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Applications' does no
           <Property Name="Application_Applicant_Name" Type="nvarchar" MaxLength="512" />
           <Property Name="Application_Applicant_Email" Type="nvarchar" MaxLength="255" />
           <Property Name="Application_Applicant_Phone" Type="nvarchar" MaxLength="125" />
-          <Property Name="Application_PDF_Path" Type="nvarchar" MaxLength="125" />
+          <Property Name="Application_Applicant_CURP" Type="nvarchar" MaxLength="125" />
+          <Property Name="Application_PDF_Path" Type="nvarchar" MaxLength="255" />
           <Property Name="Application_Date" Type="varchar" MaxLength="30" />
+          <Property Name="Request_Id" Type="int" />
           <Property Name="Application_Stage_Id" Type="int" Nullable="false" />
           <Property Name="Application_Stage_Name" Type="nvarchar" MaxLength="125" />
         </EntityType>
@@ -179,6 +182,18 @@ warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Requests' does not ha
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__cat_Appli__Reque__3B40CD36">
+          <End Role="cat_Requests" Type="Self.cat_Requests" Multiplicity="0..1" />
+          <End Role="cat_Applications" Type="Self.cat_Applications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cat_Requests">
+              <PropertyRef Name="Request_Id" />
+            </Principal>
+            <Dependent Role="cat_Applications">
+              <PropertyRef Name="Request_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="CMS_fefarmModelStoreContainer">
           <EntitySet Name="cat_Admin_Users" EntityType="Self.cat_Admin_Users" Schema="fefarmmx_admin" store:Type="Tables" />
           <EntitySet Name="cat_Application_Files" EntityType="Self.cat_Application_Files" Schema="fefarmmx_admin" store:Type="Tables" />
@@ -197,8 +212,10 @@ warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Requests' does not ha
     [vw_Applications].[Application_Applicant_Name] AS [Application_Applicant_Name], 
     [vw_Applications].[Application_Applicant_Email] AS [Application_Applicant_Email], 
     [vw_Applications].[Application_Applicant_Phone] AS [Application_Applicant_Phone], 
+    [vw_Applications].[Application_Applicant_CURP] AS [Application_Applicant_CURP], 
     [vw_Applications].[Application_PDF_Path] AS [Application_PDF_Path], 
     [vw_Applications].[Application_Date] AS [Application_Date], 
+    [vw_Applications].[Request_Id] AS [Request_Id], 
     [vw_Applications].[Application_Stage_Id] AS [Application_Stage_Id], 
     [vw_Applications].[Application_Stage_Name] AS [Application_Stage_Name]
     FROM [fefarmmx_admin].[vw_Applications] AS [vw_Applications]</DefiningQuery>
@@ -234,6 +251,10 @@ warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Requests' does not ha
           <AssociationSet Name="FK__cat_Appli__Appli__6A30C649" Association="Self.FK__cat_Appli__Appli__6A30C649">
             <End Role="cat_Applications" EntitySet="cat_Applications" />
             <End Role="cat_Application_Files" EntitySet="cat_Application_Files" />
+          </AssociationSet>
+          <AssociationSet Name="FK__cat_Appli__Reque__3B40CD36" Association="Self.FK__cat_Appli__Reque__3B40CD36">
+            <End Role="cat_Requests" EntitySet="cat_Requests" />
+            <End Role="cat_Applications" EntitySet="cat_Applications" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -276,6 +297,8 @@ warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Requests' does not ha
           <NavigationProperty Name="cat_Application_Files" Relationship="Self.FK__cat_Appli__Appli__534D60F1" FromRole="cat_Applications" ToRole="cat_Application_Files" />
           <NavigationProperty Name="cat_Application_Stages" Relationship="Self.FK__cat_Appli__Appli__5441852A" FromRole="cat_Applications" ToRole="cat_Application_Stages" />
           <Property Name="Application_Applicant_CURP" Type="String" MaxLength="125" FixedLength="false" Unicode="true" />
+          <Property Name="Request_Id" Type="Int32" />
+          <NavigationProperty Name="cat_Requests" Relationship="CMS_fefarmModel.FK__cat_Appli__Reque__3B40CD36" FromRole="cat_Applications" ToRole="cat_Requests" />
         </EntityType>
         <EntityType Name="cat_Evidences_PDF">
           <Key>
@@ -316,6 +339,7 @@ warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Requests' does not ha
           <Property Name="Request_Finish_Date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Request_Max_Applications" Type="Int32" />
           <Property Name="Request_Max_Beneficiaries" Type="Int32" />
+          <NavigationProperty Name="cat_Applications" Relationship="CMS_fefarmModel.FK__cat_Appli__Reque__3B40CD36" FromRole="cat_Requests" ToRole="cat_Applications" />
         </EntityType>
         <EntityType Name="cat_Requirements_PDF">
           <Key>
@@ -404,6 +428,10 @@ warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Requests' does not ha
           </AssociationSet>
           <EntitySet Name="vw_OpenRequestTemplates" EntityType="CMS_fefarmModel.vw_OpenRequestTemplates" />
           <EntitySet Name="vw_Applications" EntityType="CMS_fefarmModel.vw_Applications" />
+          <AssociationSet Name="FK__cat_Appli__Reque__3B40CD36" Association="CMS_fefarmModel.FK__cat_Appli__Reque__3B40CD36">
+            <End Role="cat_Requests" EntitySet="cat_Requests" />
+            <End Role="cat_Applications" EntitySet="cat_Applications" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="vw_OpenRequestTemplates">
           <Key>
@@ -430,11 +458,25 @@ warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Requests' does not ha
           <Property Name="Application_Applicant_Name" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
           <Property Name="Application_Applicant_Email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Application_Applicant_Phone" Type="String" MaxLength="125" FixedLength="false" Unicode="true" />
-          <Property Name="Application_PDF_Path" Type="String" MaxLength="125" FixedLength="false" Unicode="true" />
+          <Property Name="Application_PDF_Path" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Application_Date" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Application_Stage_Id" Type="Int32" Nullable="false" />
           <Property Name="Application_Stage_Name" Type="String" MaxLength="125" FixedLength="false" Unicode="true" />
+          <Property Name="Application_Applicant_CURP" Type="String" MaxLength="125" FixedLength="false" Unicode="true" />
+          <Property Name="Request_Id" Type="Int32" />
         </EntityType>
+        <Association Name="FK__cat_Appli__Reque__3B40CD36">
+          <End Type="CMS_fefarmModel.cat_Requests" Role="cat_Requests" Multiplicity="0..1" />
+          <End Type="CMS_fefarmModel.cat_Applications" Role="cat_Applications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cat_Requests">
+              <PropertyRef Name="Request_Id" />
+            </Principal>
+            <Dependent Role="cat_Applications">
+              <PropertyRef Name="Request_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -464,6 +506,7 @@ warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Requests' does not ha
           <EntitySetMapping Name="cat_Applications">
             <EntityTypeMapping TypeName="CMS_fefarmModel.cat_Applications">
               <MappingFragment StoreEntitySet="cat_Applications">
+                <ScalarProperty Name="Request_Id" ColumnName="Request_Id" />
                 <ScalarProperty Name="Application_Applicant_CURP" ColumnName="Application_Applicant_CURP" />
                 <ScalarProperty Name="Application_Id" ColumnName="Application_Id" />
                 <ScalarProperty Name="Application_Date" ColumnName="Application_Date" />
@@ -581,6 +624,8 @@ warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Requests' does not ha
           <EntitySetMapping Name="vw_Applications">
             <EntityTypeMapping TypeName="CMS_fefarmModel.vw_Applications">
               <MappingFragment StoreEntitySet="vw_Applications">
+                <ScalarProperty Name="Request_Id" ColumnName="Request_Id" />
+                <ScalarProperty Name="Application_Applicant_CURP" ColumnName="Application_Applicant_CURP" />
                 <ScalarProperty Name="Application_Stage_Name" ColumnName="Application_Stage_Name" />
                 <ScalarProperty Name="Application_Stage_Id" ColumnName="Application_Stage_Id" />
                 <ScalarProperty Name="Application_Date" ColumnName="Application_Date" />

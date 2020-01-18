@@ -14,6 +14,12 @@ namespace api.fefarm.mx.Entity
     
     public partial class cat_Requests
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public cat_Requests()
+        {
+            this.cat_Applications = new HashSet<cat_Applications>();
+        }
+    
         public int Request_Id { get; set; }
         public string Request_Name { get; set; }
         public string Request_JSON_Body { get; set; }
@@ -22,5 +28,8 @@ namespace api.fefarm.mx.Entity
         public System.DateTime Request_Finish_Date { get; set; }
         public Nullable<int> Request_Max_Applications { get; set; }
         public Nullable<int> Request_Max_Beneficiaries { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<cat_Applications> cat_Applications { get; set; }
     }
 }

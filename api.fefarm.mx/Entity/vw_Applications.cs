@@ -23,5 +23,7 @@ namespace api.fefarm.mx.Entity
         public string Application_Date { get; set; }
         public int Application_Stage_Id { get; set; }
         public string Application_Stage_Name { get; set; }
+        public string Application_Applicant_CURP { get; set; }
+        public Nullable<int> Request_Id { get; set; }
     }
 }

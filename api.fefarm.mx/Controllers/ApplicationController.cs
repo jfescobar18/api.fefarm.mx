@@ -40,8 +40,9 @@ namespace api.fefarm.mx.Controllers
             string applicantPhone = requestResults.Where(x => x.label == "Teléfono celular").Select(x => x.answers[0]).FirstOrDefault();
             string CURP = requestResults.Where(x => x.label == "CURP").Select(x => x.answers[0]).FirstOrDefault();
 
-            var applicationsLsit = entity.cat_Applications.Where(x => x.Application_Applicant_CURP == CURP).ToList();
-            if(applicationsLsit != null)
+            List<cat_Applications> applicationsLsit = entity.cat_Applications.Where(x => x.Application_Applicant_CURP == CURP && x.Request_Id == Request_Id).ToList();
+
+            if (applicationsLsit != null)
             {
                 statusCode = HttpStatusCode.BadRequest;
                 dict.Add("error", "NotNull");
@@ -50,6 +51,7 @@ namespace api.fefarm.mx.Controllers
             }
 
             int Score = ApplicationUtils.GetScore(requestResults);
+
             try
             {
                 var application = new cat_Applications()
@@ -201,24 +203,7 @@ namespace api.fefarm.mx.Controllers
 
             try
             {
-                string zippedPath = HttpContext.Current.Server.MapPath($"~/ApplicationFiles/Id-{Application_Id}");
-                string baseDirectory = HttpContext.Current.Server.MapPath($"~/ApplicationFilesZip/Id-{Application_Id}/");
-                string zipDestinationPath = baseDirectory + $"DocsId{Application_Id}.zip";
-
-                if (!Directory.Exists(baseDirectory))
-                {
-                    Directory.CreateDirectory(baseDirectory);
-                }
-                
-                if (File.Exists(zipDestinationPath))
-                {
-                    File.Delete(zipDestinationPath);
-                }
-
-                ZipFile.CreateFromDirectory(zippedPath, zipDestinationPath, CompressionLevel.Fastest, true);
-
-                var dataBytes = File.ReadAllBytes(zipDestinationPath); 
-                var dataStream = new MemoryStream(dataBytes);
+                ApplicationUtils.CreateZipFile(Application_Id);
 
                 statusCode = HttpStatusCode.OK;
                 dict.Add("path", $"ApplicationFilesZip/Id-{Application_Id}/DocsId{Application_Id}.zip");
@@ -234,8 +219,8 @@ namespace api.fefarm.mx.Controllers
         }
 
         [HttpGet]
-        [Route("Application/GetApplicationsExcel")]
-        public async Task<HttpResponseMessage> GetApplicationsExcel()
+        [Route("Application/GetApplicationsExcel/{Request_Id}")]
+        public async Task<HttpResponseMessage> GetApplicationsExcel(int Request_Id)
         {
             Dictionary<string, object> dict = new Dictionary<string, object>();
             CMS_fefarmEntities entity = new CMS_fefarmEntities();
@@ -243,7 +228,9 @@ namespace api.fefarm.mx.Controllers
 
             try
             {
-                List<cat_Applications> Applications = entity.cat_Applications.ToList();
+                List<cat_Applications> applications = entity.cat_Applications.Where(x => x.Request_Id == Request_Id).ToList();
+
+                ApplicationUtils.CreateExcel(applications, Request_Id);
 
                 statusCode = HttpStatusCode.OK;
                 dict.Add("path", $"ExcelReport/report.xlsx");
@@ -257,7 +244,9 @@ namespace api.fefarm.mx.Controllers
             await Task.CompletedTask;
             return Request.CreateResponse(statusCode, dict);
         }
+        #endregion
 
+        #region Developer Utils avoid their use on production
         [HttpGet]
         [Route("Application/FixApplications")]
         public async Task<HttpResponseMessage> FixApplications()

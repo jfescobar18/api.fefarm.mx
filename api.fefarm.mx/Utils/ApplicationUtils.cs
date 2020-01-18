@@ -3,15 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using iTextSharp;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Web;
 using api.fefarm.mx.Entity;
-using Newtonsoft.Json;
-using System.Text;
-using iTextSharp.text.html.simpleparser;
 using iTextSharp.text.pdf.draw;
+using System.IO.Compression;
+using OfficeOpenXml;
+using Newtonsoft.Json;
+using OfficeOpenXml.Style;
 
 namespace Utils
 {
@@ -98,14 +98,11 @@ namespace Utils
                 }
 
             }
-
             return finalScore;
         }
 
         static public void CreateReport(List<RequestModel> requestResults, int Application_Id)
         {
-            CMS_fefarmEntities entity = new CMS_fefarmEntities();
-
             string filePath = HttpContext.Current.Server.MapPath($"~/PDF-Applications/ApplicationId-{Application_Id}/");
             string fileName = "application.pdf";
 
@@ -303,32 +300,91 @@ namespace Utils
             }
         }
 
-        private static StringBuilder CreateHtmlTemplate(List<RequestModel> requestResults, int Application_Id)
+        static public void CreateExcel(List<cat_Applications> applications, int Request_Id)
         {
-            StringBuilder sb = new StringBuilder();
+            CMS_fefarmEntities entity = new CMS_fefarmEntities();
 
-            string profileImagePath = Directory.GetFiles(HttpContext.Current.Server.MapPath($"~/ApplicationFiles/Id-{Application_Id}"), "*.*", SearchOption.AllDirectories)
-                .Where(file => new string[] { ".jpg", ".jpeg", ".gif", ".png" }
-                .Contains(Path.GetExtension(file)))
-                .FirstOrDefault();
+            string filePath = HttpContext.Current.Server.MapPath($"~/ExcelReport/");
+            string fileName = "report.xlsx";
 
-            sb.Append("<div style='display: block;padding: 4px;margin-bottom: 20px;line-height: 1.42857143;background-color: #fff;border: 1px solid #ddd;border-radius: 4px;'>");
-            sb.Append("<div style='float: left;position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;padding-top: 1.25rem;width: 16.66666667%;margin-left: 83.33333333%;'>");
-            sb.Append($"<img src='{profileImagePath}' alt='profile' class='profile-picture' />");
-            sb.Append($"</div>");
-            sb.Append($"<div class='col-md-2 col-md-offset-10 pt-5'><img src='{profileImagePath}' alt='profile' class='profile-picture' /></div>");
+            var request = entity.cat_Requests.FirstOrDefault(x => x.Request_Id == Request_Id);
+            List<RequestModel> requestContent = JsonConvert.DeserializeObject<List<RequestModel>>(request.Request_JSON_Body);
 
-            
+            requestContent = requestContent.Where(x => int.Parse(x.type) != (int)InputTypes.Title &&
+                                                        int.Parse(x.type) != (int)InputTypes.Subtitle &&
+                                                        int.Parse(x.type) != (int)InputTypes.Small &&
+                                                        int.Parse(x.type) != (int)InputTypes.Paragraph).ToList();
 
-            sb.Append($"</div>");
+            try
+            {
+                if (!Directory.Exists(filePath))
+                {
+                    Directory.CreateDirectory(filePath);
+                }
 
-            return sb;
+                if (File.Exists(filePath + fileName))
+                {
+                    File.Delete(filePath + fileName);
+                }
+
+                using (ExcelPackage excelPackage = new ExcelPackage())
+                {
+                    excelPackage.Workbook.Properties.Author = "FEFARM";
+                    excelPackage.Workbook.Properties.Title = "Reporte de solicitudes";
+                    excelPackage.Workbook.Properties.Subject = $"Solicitud: {request.Request_Name}";
+                    excelPackage.Workbook.Properties.Created = DateTime.Now;
+
+                    ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Resultados");
+
+                    worksheet.Row(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Row(1).Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    worksheet.Row(1).Style.Font.Bold = true;
+                    worksheet.Row(1).Height = 23;
+
+                    for (int i = 0; i < requestContent.Count; i++)
+                    {
+                        worksheet.Cells[1, i + 1].Style.Font.Name = "Calibri";
+                        worksheet.Cells[1, i + 1].Value = requestContent[i].label;
+                        worksheet.Cells[1, i + 1].AutoFitColumns();
+                    }
+
+                    FileInfo fi = new FileInfo(filePath + fileName);
+                    excelPackage.SaveAs(fi);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
-        private static string GetColWidth(int size)
+        static public void CreateZipFile(int Application_Id)
         {
-            float totalWidth = (100 / 12) * size;
-            return totalWidth.ToString().Length > 5 ? totalWidth.ToString().Substring(0, 4) : totalWidth.ToString();
+            try
+            {
+                string zippedPath = HttpContext.Current.Server.MapPath($"~/ApplicationFiles/Id-{Application_Id}");
+                string baseDirectory = HttpContext.Current.Server.MapPath($"~/ApplicationFilesZip/Id-{Application_Id}/");
+                string zipDestinationPath = baseDirectory + $"DocsId{Application_Id}.zip";
+
+                if (!Directory.Exists(baseDirectory))
+                {
+                    Directory.CreateDirectory(baseDirectory);
+                }
+
+                if (File.Exists(zipDestinationPath))
+                {
+                    File.Delete(zipDestinationPath);
+                }
+
+                ZipFile.CreateFromDirectory(zippedPath, zipDestinationPath, System.IO.Compression.CompressionLevel.Fastest, true);
+
+                var dataBytes = File.ReadAllBytes(zipDestinationPath);
+                var dataStream = new MemoryStream(dataBytes);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }

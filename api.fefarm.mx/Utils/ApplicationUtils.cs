@@ -23,7 +23,8 @@ namespace Utils
 
             var scoredQuestions = requestResults.Where(x => x.points.@string.Length > 0).ToList();
 
-            int Index = int.Parse(requestResults.Where(y => y.label.Contains("cambiar su ciudad de residencia")).Select(x => x.answers[0]).FirstOrDefault());
+            string strIndex = requestResults.Where(y => y.label.Contains("cambiar su ciudad de residencia")).Select(x => x.answers[0]).FirstOrDefault();
+            int Index = int.Parse(strIndex.Length > 0 ? strIndex : "0");
 
             if (Index == 1)
             {
@@ -341,11 +342,103 @@ namespace Utils
                     worksheet.Row(1).Style.Font.Bold = true;
                     worksheet.Row(1).Height = 23;
 
+                    worksheet.Cells[1, 1].Style.Font.Name = "Calibri";
+                    worksheet.Cells[1, 1].Value = "Puntaje Obtenido";
+                    worksheet.Cells[1, 1].AutoFitColumns();
+
                     for (int i = 0; i < requestContent.Count; i++)
                     {
-                        worksheet.Cells[1, i + 1].Style.Font.Name = "Calibri";
-                        worksheet.Cells[1, i + 1].Value = requestContent[i].label;
-                        worksheet.Cells[1, i + 1].AutoFitColumns();
+                        worksheet.Cells[1, i + 2].Style.Font.Name = "Calibri";
+                        worksheet.Cells[1, i + 2].Value = requestContent[i].label;
+                        worksheet.Cells[1, i + 2].AutoFitColumns();
+                    }
+
+                    int Row = 2;
+
+                    foreach (var application in applications)
+                    {
+                        string Application_JSON_Body = application.Application_JSON_Body;
+
+                        List<RequestModel> requestResults = JsonConvert.DeserializeObject<List<RequestModel>>(Application_JSON_Body);
+
+                        requestResults = requestResults.Where(x => int.Parse(x.type) != (int)InputTypes.Title &&
+                                                        int.Parse(x.type) != (int)InputTypes.Subtitle &&
+                                                        int.Parse(x.type) != (int)InputTypes.Small &&
+                                                        int.Parse(x.type) != (int)InputTypes.Paragraph).ToList();
+
+                        worksheet.Cells[Row, 1].Style.Font.Name = "Calibri";
+                        worksheet.Cells[Row, 1].Value = application.Application_Score;
+                        worksheet.Cells[Row, 1].Style.Numberformat.Format = "#";
+
+                        for (int i = 0; i < requestResults.Count; i++)
+                        {
+                            try
+                            {
+                                switch ((InputTypes)int.Parse(requestResults[i].type))
+                                {
+                                    case InputTypes.Text:
+                                        string textAnswer = requestResults[i].answers[0];
+                                        worksheet.Cells[Row, i + 2].Style.Font.Name = "Calibri";
+                                        worksheet.Cells[Row, i + 2].Value = textAnswer;
+                                        worksheet.Cells[Row, i + 2].Style.Numberformat.Format = "@";
+                                        break;
+                                    case InputTypes.Date:
+                                        string dateAnswer = requestResults[i].answers[0];
+                                        worksheet.Cells[Row, i + 2].Style.Font.Name = "Calibri";
+                                        worksheet.Cells[Row, i + 2].Value = dateAnswer;
+                                        worksheet.Cells[Row, i + 2].Style.Numberformat.Format = "dd-MM-yyyy";
+                                        break;
+                                    case InputTypes.Textarea:
+                                        string textareaAnswer = requestResults[i].answers[0];
+                                        worksheet.Cells[Row, i + 2].Style.Font.Name = "Calibri";
+                                        worksheet.Cells[Row, i + 2].Value = textareaAnswer;
+                                        worksheet.Cells[Row, i + 2].Style.Numberformat.Format = "@";
+                                        break;
+                                    case InputTypes.Dropdown:
+                                        int answerIndex = int.Parse(requestResults[i].answers[0]);
+                                        string dropdownAnswer = (string)requestResults[i].values.array[answerIndex];
+                                        worksheet.Cells[Row, i + 2].Style.Font.Name = "Calibri";
+                                        worksheet.Cells[Row, i + 2].Value = dropdownAnswer.Replace(";", ",");
+                                        worksheet.Cells[Row, i + 2].Style.Numberformat.Format = "@";
+                                        break;
+                                    case InputTypes.Checklist:
+                                        for (int j = 0; j < requestResults[i].answers.Count; j++)
+                                        {
+                                            worksheet.Cells[Row, i + 2].Style.Font.Name = "Calibri";
+
+                                            if (requestResults[i].answers[j] == "true")
+                                            {
+                                                worksheet.Cells[Row, i + 2].Style.Font.Color.SetColor(System.Drawing.Color.FromArgb(23, 197, 166));
+                                            }
+                                            else
+                                            {
+                                                worksheet.Cells[Row, i + 2].Style.Font.Color.SetColor(System.Drawing.Color.FromArgb(197, 23, 54));
+                                            }
+                                            worksheet.Cells[Row, i + 2].RichText.Add("- " + (string)requestResults[i].values.array[j] + "\r\n");
+                                        }
+                                        break;
+                                    case InputTypes.Check:
+
+                                        worksheet.Cells[Row, i + 2].Style.Font.Name = "Calibri";
+                                        if (requestResults[i].answers[0] == "true")
+                                        {
+                                            worksheet.Cells[Row, i + 2].Style.Font.Color.SetColor(System.Drawing.Color.FromArgb(23, 197, 166));
+                                        }
+                                        else
+                                        {
+                                            worksheet.Cells[Row, i + 2].Style.Font.Color.SetColor(System.Drawing.Color.FromArgb(197, 23, 54));
+                                        }
+                                        worksheet.Cells[Row, i + 2].Value = requestResults[i].label;
+                                        break;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
+                        }
+
+                        Row++;
                     }
 
                     FileInfo fi = new FileInfo(filePath + fileName);

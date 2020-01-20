@@ -13,6 +13,7 @@ using Utils;
 
 namespace api.fefarm.mx.Controllers
 {
+    [System.Web.Mvc.SessionState(System.Web.SessionState.SessionStateBehavior.ReadOnly)]
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class RulesPDFController : ApiController
     {

@@ -10,13 +10,11 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
-using System.IO.Compression;
 using Utils;
-using System.IO;
-using System.Net.Http.Headers;
 
 namespace api.fefarm.mx.Controllers
 {
+    [System.Web.Mvc.SessionState(System.Web.SessionState.SessionStateBehavior.ReadOnly)]
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class ApplicationController : ApiController
     {
@@ -42,7 +40,7 @@ namespace api.fefarm.mx.Controllers
 
             List<cat_Applications> applicationsLsit = entity.cat_Applications.Where(x => x.Application_Applicant_CURP == CURP && x.Request_Id == Request_Id).ToList();
 
-            if (applicationsLsit != null)
+            if (applicationsLsit.Count > 0)
             {
                 statusCode = HttpStatusCode.BadRequest;
                 dict.Add("error", "NotNull");

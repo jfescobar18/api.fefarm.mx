@@ -12,6 +12,7 @@ using System.Web.Http.Cors;
 
 namespace api.fefarm.mx.Controllers
 {
+    [System.Web.Mvc.SessionState(System.Web.SessionState.SessionStateBehavior.ReadOnly)]
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class RequestsController : ApiController
     {
@@ -121,7 +122,7 @@ namespace api.fefarm.mx.Controllers
             await Task.CompletedTask;
             return Request.CreateResponse(statusCode, dict);
         }
-
+        
         [HttpGet]
         [Route("Requests/GetRequestTemplates")]
         public async Task<List<vw_Requests>> GetRequestTemplates()

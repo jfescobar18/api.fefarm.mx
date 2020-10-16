@@ -180,8 +180,6 @@
     <Compile Include="Controllers\RulesPDFController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Compression\CompressionHelper.cs" />
-    <Compile Include="Compression\DeflateCompressionAttribute.cs" />
     <Compile Include="Entity\cat_Admin_Users.cs">
       <DependentUpon>CMS_fefarm.tt</DependentUpon>
     </Compile>
@@ -227,6 +225,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CMS_fefarm.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Entity\Error_Logs.cs">
+      <DependentUpon>CMS_fefarm.tt</DependentUpon>
+    </Compile>
     <Compile Include="Entity\vw_Applications.cs">
       <DependentUpon>CMS_fefarm.tt</DependentUpon>
     </Compile>
@@ -248,6 +249,7 @@
     <Compile Include="Utils\ApplicationUtils.cs" />
     <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="Utils\InputTypes.cs" />
+    <Compile Include="Utils\Logs.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />

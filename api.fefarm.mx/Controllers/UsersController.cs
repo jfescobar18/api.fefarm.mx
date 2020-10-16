@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Cors;
 using System.Web.Http;
+using Utils;
 
 namespace api.fefarm.mx.Controllers
 {
@@ -42,6 +43,7 @@ namespace api.fefarm.mx.Controllers
             catch (Exception ex)
             {
                 dict.Add("message", ex.Message);
+                Logs.AddLog(ex.Message);
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, dict);
             }
         }

@@ -98,6 +98,14 @@
           <Property Name="Rules_PDF_Path" Type="nvarchar" MaxLength="512" Nullable="false" />
           <Property Name="Rules_PDF_Upload_Date" Type="datetime" />
         </EntityType>
+        <EntityType Name="Error_Logs">
+          <Key>
+            <PropertyRef Name="Error_Log_Id" />
+          </Key>
+          <Property Name="Error_Log_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Error_Log_Message" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Error_Log_Date" Type="datetime" />
+        </EntityType>
         <EntityType Name="cat_Application_Stages">
           <Key>
             <PropertyRef Name="Application_Stage_Id" />
@@ -105,8 +113,8 @@
           <Property Name="Application_Stage_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Application_Stage_Name" Type="nvarchar" MaxLength="125" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Applications' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'CMS_fefarm.fefarmmx_admin.vw_Applications' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="vw_Applications">
           <Key>
             <PropertyRef Name="Application_Id" />
@@ -124,8 +132,8 @@ warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Applications' does no
           <Property Name="Application_Stage_Id" Type="int" Nullable="false" />
           <Property Name="Application_Stage_Name" Type="nvarchar" MaxLength="125" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_OpenRequestTemplates' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'CMS_fefarm.fefarmmx_admin.vw_OpenRequestTemplates' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="vw_OpenRequestTemplates">
           <Key>
             <PropertyRef Name="Request_Id" />
@@ -141,8 +149,8 @@ warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_OpenRequestTemplates'
           <Property Name="Request_Max_Applications" Type="int" />
           <Property Name="Request_Max_Beneficiaries" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Requests' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'CMS_fefarm.fefarmmx_admin.vw_Requests' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="vw_Requests">
           <Key>
             <PropertyRef Name="Request_Id" />
@@ -204,6 +212,7 @@ warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Requests' does not ha
           <EntitySet Name="cat_Requests" EntityType="Self.cat_Requests" Schema="fefarmmx_admin" store:Type="Tables" />
           <EntitySet Name="cat_Requirements_PDF" EntityType="Self.cat_Requirements_PDF" Schema="fefarmmx_admin" store:Type="Tables" />
           <EntitySet Name="cat_Rules_PDF" EntityType="Self.cat_Rules_PDF" Schema="fefarmmx_admin" store:Type="Tables" />
+          <EntitySet Name="Error_Logs" EntityType="Self.Error_Logs" Schema="fefarmmx_admin" store:Type="Tables" />
           <EntitySet Name="cat_Application_Stages" EntityType="Self.cat_Application_Stages" Schema="lookup" store:Type="Tables" />
           <EntitySet Name="vw_Applications" EntityType="Self.vw_Applications" store:Type="Views" store:Schema="fefarmmx_admin">
             <DefiningQuery>SELECT 
@@ -432,6 +441,7 @@ warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Requests' does not ha
             <End Role="cat_Requests" EntitySet="cat_Requests" />
             <End Role="cat_Applications" EntitySet="cat_Applications" />
           </AssociationSet>
+          <EntitySet Name="Error_Logs" EntityType="CMS_fefarmModel.Error_Logs" />
         </EntityContainer>
         <EntityType Name="vw_OpenRequestTemplates">
           <Key>
@@ -477,6 +487,14 @@ warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Requests' does not ha
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Error_Logs">
+          <Key>
+            <PropertyRef Name="Error_Log_Id" />
+          </Key>
+          <Property Name="Error_Log_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Error_Log_Message" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Error_Log_Date" Type="DateTime" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -635,6 +653,15 @@ warning 6002: The table/view 'CMS_fefarm.fefarmmx_admin.vw_Requests' does not ha
                 <ScalarProperty Name="Application_Applicant_Name" ColumnName="Application_Applicant_Name" />
                 <ScalarProperty Name="Application_Score" ColumnName="Application_Score" />
                 <ScalarProperty Name="Application_Id" ColumnName="Application_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Error_Logs">
+            <EntityTypeMapping TypeName="CMS_fefarmModel.Error_Logs">
+              <MappingFragment StoreEntitySet="Error_Logs">
+                <ScalarProperty Name="Error_Log_Date" ColumnName="Error_Log_Date" />
+                <ScalarProperty Name="Error_Log_Message" ColumnName="Error_Log_Message" />
+                <ScalarProperty Name="Error_Log_Id" ColumnName="Error_Log_Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

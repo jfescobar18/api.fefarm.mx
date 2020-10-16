@@ -62,6 +62,7 @@ namespace Utils
             catch (Exception ex)
             {
                 dict.Add("message", ex.Message);
+                Logs.AddLog(ex.Message);
                 statusCode = HttpStatusCode.BadRequest;
             }
         }

@@ -21,6 +21,7 @@
         <EntityTypeShape EntityType="CMS_fefarmModel.vw_OpenRequestTemplates" Width="1.5" PointX="10.375" PointY="0.75" />
         <EntityTypeShape EntityType="CMS_fefarmModel.vw_Applications" Width="1.5" PointX="0.75" PointY="8.75" />
         <AssociationConnector Association="CMS_fefarmModel.FK__cat_Appli__Reque__3B40CD36" />
+        <EntityTypeShape EntityType="CMS_fefarmModel.Error_Logs" Width="1.5" PointX="3.375" PointY="10.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

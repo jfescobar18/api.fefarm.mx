@@ -132,6 +132,7 @@ namespace api.fefarm.mx.Controllers
                 {
                     dict = new Dictionary<string, object>();
                     dict.Add("message", ex.Message);
+                    Logs.AddLog(ex.Message);
                 }
             }
 
@@ -164,6 +165,7 @@ namespace api.fefarm.mx.Controllers
                 {
                     dict = new Dictionary<string, object>();
                     dict.Add("message", ex.Message);
+                    Logs.AddLog(ex.Message);
                 }
             }
 
@@ -210,6 +212,7 @@ namespace api.fefarm.mx.Controllers
             catch (Exception ex)
             {
                 dict.Add("message", ex.Message);
+                    Logs.AddLog(ex.Message);
             }
 
             await Task.CompletedTask;
@@ -237,6 +240,7 @@ namespace api.fefarm.mx.Controllers
             catch (Exception ex)
             {
                 dict.Add("message", ex.Message);
+                    Logs.AddLog(ex.Message);
             }
 
             await Task.CompletedTask;
@@ -283,6 +287,7 @@ namespace api.fefarm.mx.Controllers
                 {
                     dict = new Dictionary<string, object>();
                     dict.Add("message", ex.Message);
+                    Logs.AddLog(ex.Message);
                 }
             }
 

@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using Utils;
 
 namespace api.fefarm.mx.Controllers
 {
@@ -50,6 +51,7 @@ namespace api.fefarm.mx.Controllers
                 {
                     dict = new Dictionary<string, object>();
                     dict.Add("message", ex.Message);
+                    Logs.AddLog(ex.Message);
                 }
             }
 
@@ -86,6 +88,7 @@ namespace api.fefarm.mx.Controllers
                 {
                     dict = new Dictionary<string, object>();
                     dict.Add("message", ex.Message);
+                    Logs.AddLog(ex.Message);
                 }
             }
 
@@ -116,6 +119,7 @@ namespace api.fefarm.mx.Controllers
                 {
                     dict = new Dictionary<string, object>();
                     dict.Add("message", ex.Message);
+                    Logs.AddLog(ex.Message);
                 }
             }
 
@@ -189,6 +193,7 @@ namespace api.fefarm.mx.Controllers
                 {
                     dict = new Dictionary<string, object>();
                     dict.Add("message", ex.Message);
+                    Logs.AddLog(ex.Message);
                 }
             }
 

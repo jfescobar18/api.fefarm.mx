@@ -25,7 +25,7 @@ namespace Utils
             var scoredQuestions = requestResults.Where(x => x.points.@string.Length > 0).ToList();
 
             string strIndex = requestResults.Where(y => y.label.Contains("cambiar su ciudad de residencia") || y.label.Contains("cambiar de residencia")).Select(x => x.answers[0]).FirstOrDefault();
-            int Index = int.Parse(strIndex.Length > 0 ? strIndex : "0");
+            int Index = strIndex != null ? int.Parse(strIndex.Length > 0 ? strIndex : "0") : 0;
 
             if (Index == 1)
             {

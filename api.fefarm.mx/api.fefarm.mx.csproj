@@ -192,6 +192,9 @@
     <Compile Include="Entity\cat_Application_Stages.cs">
       <DependentUpon>CMS_fefarm.tt</DependentUpon>
     </Compile>
+    <Compile Include="Entity\cat_Duplicated_CURP.cs">
+      <DependentUpon>CMS_fefarm.tt</DependentUpon>
+    </Compile>
     <Compile Include="Entity\cat_Evidences_PDF.cs">
       <DependentUpon>CMS_fefarm.tt</DependentUpon>
     </Compile>

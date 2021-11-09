@@ -42,6 +42,13 @@ namespace api.fefarm.mx.Controllers
 
             if (applicationsLsit.Count > 0)
             {
+                var duplicatedCURP = new cat_Duplicated_CURP();
+                duplicatedCURP.Duplicated_CURP_CURP = CURP;
+                duplicatedCURP.Duplicated_CURP_Registered = DateTime.Now;
+
+                entity.cat_Duplicated_CURP.Add(duplicatedCURP);
+                entity.SaveChanges();
+
                 statusCode = HttpStatusCode.BadRequest;
                 dict.Add("error", "NotNull");
                 await Task.CompletedTask;

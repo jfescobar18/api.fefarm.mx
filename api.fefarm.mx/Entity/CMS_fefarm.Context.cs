@@ -39,5 +39,6 @@ namespace api.fefarm.mx.Entity
         public virtual DbSet<vw_OpenRequestTemplates> vw_OpenRequestTemplates { get; set; }
         public virtual DbSet<vw_Applications> vw_Applications { get; set; }
         public virtual DbSet<Error_Logs> Error_Logs { get; set; }
+        public virtual DbSet<cat_Duplicated_CURP> cat_Duplicated_CURP { get; set; }
     }
 }

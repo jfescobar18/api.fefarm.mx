@@ -40,6 +40,14 @@
           <Property Name="Application_Applicant_CURP" Type="nvarchar" MaxLength="125" />
           <Property Name="Request_Id" Type="int" />
         </EntityType>
+        <EntityType Name="cat_Duplicated_CURP">
+          <Key>
+            <PropertyRef Name="Duplicated_CURP_Id" />
+          </Key>
+          <Property Name="Duplicated_CURP_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Duplicated_CURP_CURP" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Duplicated_CURP_Registered" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="cat_Evidences_PDF">
           <Key>
             <PropertyRef Name="Evidences_PDF_Id" />
@@ -206,6 +214,7 @@ advertencia 6002: La tabla o vista 'CMS_fefarm.fefarmmx_admin.vw_Requests' no ti
           <EntitySet Name="cat_Admin_Users" EntityType="Self.cat_Admin_Users" Schema="fefarmmx_admin" store:Type="Tables" />
           <EntitySet Name="cat_Application_Files" EntityType="Self.cat_Application_Files" Schema="fefarmmx_admin" store:Type="Tables" />
           <EntitySet Name="cat_Applications" EntityType="Self.cat_Applications" Schema="fefarmmx_admin" store:Type="Tables" />
+          <EntitySet Name="cat_Duplicated_CURP" EntityType="Self.cat_Duplicated_CURP" Schema="fefarmmx_admin" store:Type="Tables" />
           <EntitySet Name="cat_Evidences_PDF" EntityType="Self.cat_Evidences_PDF" Schema="fefarmmx_admin" store:Type="Tables" />
           <EntitySet Name="cat_Grant_PDF" EntityType="Self.cat_Grant_PDF" Schema="fefarmmx_admin" store:Type="Tables" />
           <EntitySet Name="cat_News_PDF" EntityType="Self.cat_News_PDF" Schema="fefarmmx_admin" store:Type="Tables" />
@@ -442,6 +451,7 @@ advertencia 6002: La tabla o vista 'CMS_fefarm.fefarmmx_admin.vw_Requests' no ti
             <End Role="cat_Applications" EntitySet="cat_Applications" />
           </AssociationSet>
           <EntitySet Name="Error_Logs" EntityType="CMS_fefarmModel.Error_Logs" />
+          <EntitySet Name="cat_Duplicated_CURP" EntityType="CMS_fefarmModel.cat_Duplicated_CURP" />
         </EntityContainer>
         <EntityType Name="vw_OpenRequestTemplates">
           <Key>
@@ -494,6 +504,14 @@ advertencia 6002: La tabla o vista 'CMS_fefarm.fefarmmx_admin.vw_Requests' no ti
           <Property Name="Error_Log_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Error_Log_Message" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Error_Log_Date" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="cat_Duplicated_CURP">
+          <Key>
+            <PropertyRef Name="Duplicated_CURP_Id" />
+          </Key>
+          <Property Name="Duplicated_CURP_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Duplicated_CURP_CURP" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Duplicated_CURP_Registered" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -662,6 +680,15 @@ advertencia 6002: La tabla o vista 'CMS_fefarm.fefarmmx_admin.vw_Requests' no ti
                 <ScalarProperty Name="Error_Log_Date" ColumnName="Error_Log_Date" />
                 <ScalarProperty Name="Error_Log_Message" ColumnName="Error_Log_Message" />
                 <ScalarProperty Name="Error_Log_Id" ColumnName="Error_Log_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cat_Duplicated_CURP">
+            <EntityTypeMapping TypeName="CMS_fefarmModel.cat_Duplicated_CURP">
+              <MappingFragment StoreEntitySet="cat_Duplicated_CURP">
+                <ScalarProperty Name="Duplicated_CURP_Registered" ColumnName="Duplicated_CURP_Registered" />
+                <ScalarProperty Name="Duplicated_CURP_CURP" ColumnName="Duplicated_CURP_CURP" />
+                <ScalarProperty Name="Duplicated_CURP_Id" ColumnName="Duplicated_CURP_Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
